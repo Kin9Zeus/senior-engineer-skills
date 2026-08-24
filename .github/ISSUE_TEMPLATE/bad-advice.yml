@@ -1,0 +1,91 @@
+name: A skill gave bad advice
+description: The most valuable issue you can file. A skill produced guidance that was wrong, unsafe, or worse than no guidance.
+title: "[advice] "
+labels: ["bad-advice"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the issue type that improves the repository most. A skill that
+        confidently gives a wrong answer is worse than no skill at all.
+
+        For a security problem **in this repository**, use
+        [private reporting](https://github.com/Kin9Zeus/senior-engineer-skills/security/advisories/new)
+        instead.
+
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Which skill
+      options:
+        - senior-engineer
+        - project-audit
+        - project-blueprint
+        - security-hardening
+        - database-engineering
+        - api-contracts
+        - devops-platform
+        - observability-slo
+        - testing-strategy
+        - performance-engineering
+        - accessibility-audit
+        - web-presence-audit
+        - privacy-compliance
+        - release-readiness
+        - engineering-standards
+        - Not sure / more than one
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: What you asked
+      description: The prompt or command, verbatim.
+      placeholder: "/snr-audit --deep"
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: What it said
+      description: The relevant part of the output. Trim it to what matters.
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: correct
+    attributes:
+      label: What the correct answer would have been
+      description: |
+        And, if you can, why — a link to documentation, a spec, or a
+        reproduction. This is the part that lets us fix it properly rather
+        than guessing.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: How bad
+      options:
+        - "Unsafe — following this would create a vulnerability or lose data"
+        - "Wrong — factually incorrect (a version, an API, a behaviour)"
+        - "Outdated — was true once, is not now"
+        - "Unhelpful — technically correct but not actionable"
+    validations:
+      required: true
+
+  - type: input
+    id: stack
+    attributes:
+      label: Stack and context
+      placeholder: "Next.js 15, Postgres 16, deployed on Fly"
+
+  - type: input
+    id: agent
+    attributes:
+      label: Agent and version
+      placeholder: "Claude Code 2.x"

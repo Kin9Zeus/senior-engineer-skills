@@ -1,0 +1,59 @@
+name: A skill did not activate (or activated wrongly)
+description: A skill should have loaded and did not, or loaded when it should not have.
+title: "[activation] "
+labels: ["activation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Activation is driven entirely by the `description` field in a skill's
+        frontmatter. If you tell us the **exact phrasing you used**, this is
+        usually a one-line fix.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What happened
+      options:
+        - "Did not activate when it should have"
+        - "Activated when it should not have"
+        - "The wrong skill activated"
+    validations:
+      required: true
+
+  - type: input
+    id: skill
+    attributes:
+      label: Which skill
+      placeholder: "web-presence-audit"
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Exactly what you typed
+      description: Verbatim, including the wording you would naturally use. This is the important field.
+      placeholder: "my site isn't showing up on google"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      placeholder: "web-presence-audit should have loaded and checked robots.txt, indexing and metadata"
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Did naming the skill explicitly work?
+      description: "e.g. 'use the web-presence-audit skill' — if that worked, it confirms a description problem rather than a content problem."
+
+  - type: input
+    id: agent
+    attributes:
+      label: Agent and version
+      placeholder: "Claude Code 2.x"

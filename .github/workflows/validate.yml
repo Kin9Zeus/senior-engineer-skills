@@ -1,0 +1,180 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  structure:
+    name: Structure and frontmatter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+
+      - name: Validate skills, commands, agents and manifests
+        run: node .github/scripts/validate.mjs
+
+  shell:
+    name: Shell scripts parse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: bash -n
+        run: |
+          fail=0
+          for f in $(find . -name '*.sh' -not -path './.git/*'); do
+            if bash -n "$f"; then
+              echo "ok   $f"
+            else
+              echo "FAIL $f"; fail=1
+            fi
+          done
+          exit $fail
+
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          # Informational: style suggestions do not block the build.
+          find . -name '*.sh' -not -path './.git/*' -print0 \
+            | xargs -0 shellcheck --severity=error || true
+
+      - name: Scripts are executable
+        run: |
+          missing=""
+          for f in $(find . -name '*.sh' -not -path './.git/*'); do
+            [ -x "$f" ] || missing="$missing $f"
+          done
+          if [ -n "$missing" ]; then
+            echo "These scripts are not marked executable in git:"
+            for f in $missing; do echo "  $f"; done
+            echo ""
+            echo "Git on Windows does not track the executable bit by default."
+            echo "Fix it once, from any machine:"
+            echo ""
+            for f in $missing; do echo "  git update-index --add --chmod=+x $f"; done
+            echo "  git commit -m 'chore: mark shell scripts executable'"
+            exit 1
+          fi
+          echo "ok — all shell scripts are executable"
+
+      - name: Shell scripts use LF line endings
+        run: |
+          bad=$(find . -name '*.sh' -not -path './.git/*' -exec file {} \; | grep CRLF || true)
+          if [ -n "$bad" ]; then
+            echo "CRLF line endings found — these will fail on Linux and macOS with"
+            echo "  bad interpreter: /usr/bin/env bash^M"
+            echo "$bad"
+            echo ""
+            echo ".gitattributes should prevent this. Renormalise with:"
+            echo "  git add --renormalize . && git commit -m 'chore: normalise line endings'"
+            exit 1
+          fi
+          echo "ok — all shell scripts use LF"
+
+  powershell:
+    name: PowerShell scripts parse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse every .ps1
+        shell: pwsh
+        run: |
+          $fail = 0
+          Get-ChildItem -Recurse -Filter *.ps1 | ForEach-Object {
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              $_.FullName, [ref]$null, [ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) {
+              Write-Host "FAIL $($_.FullName)" -ForegroundColor Red
+              $errors | Select-Object -First 3 | ForEach-Object {
+                Write-Host "     line $($_.Extent.StartLineNumber): $($_.Message)"
+              }
+              $fail = 1
+            } else {
+              Write-Host "ok   $($_.Name)"
+            }
+          }
+          exit $fail
+
+  assets:
+    name: Assets and manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SVGs are well-formed XML
+        run: |
+          python3 - <<'PY'
+          import xml.dom.minidom as m, glob, sys
+          bad = 0
+          for f in glob.glob('assets/*.svg'):
+              try:
+                  m.parse(f); print(f'ok   {f}')
+              except Exception as e:
+                  print(f'FAIL {f}: {e}'); bad = 1
+          sys.exit(bad)
+          PY
+
+      - name: JSON manifests parse
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          bad = 0
+          for p in ['.claude-plugin/marketplace.json', '.claude-plugin/plugin.json']:
+              try:
+                  json.load(open(p)); print(f'ok   {p}')
+              except Exception as e:
+                  print(f'FAIL {p}: {e}'); bad = 1
+          sys.exit(bad)
+          PY
+
+  hygiene:
+    name: Repository hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: No secret-shaped files tracked
+        run: |
+          hits=$(git ls-files | grep -E '(^|/)\.env($|\.)|\.pem$|\.key$|\.p12$|id_rsa' | grep -v example || true)
+          if [ -n "$hits" ]; then echo "Secret-shaped files tracked:"; echo "$hits"; exit 1; fi
+          echo "ok"
+
+      - name: No live-key patterns in content
+        run: |
+          # Excludes documentation that deliberately shows the PATTERNS themselves.
+          hits=$(grep -rEln '(sk_live_[0-9a-zA-Z]{16,}|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36})' . \
+                   --exclude-dir=.git \
+                   --exclude='*secret-scan*' --exclude='*recon*' \
+                   --exclude='owasp-checklist.md' --exclude='quick-scan.md' \
+                   --exclude='discovery-protocol.md' --exclude='supply-chain.md' \
+                   --exclude='data-inventory.md' --exclude='validate.yml' || true)
+          if [ -n "$hits" ]; then echo "Live-key patterns found:"; echo "$hits"; exit 1; fi
+          echo "ok"
+
+      - name: Bilingual documentation stays in sync
+        run: |
+          for f in README README.es; do
+            if [ ! -f "$f.md" ]; then echo "missing $f.md"; exit 1; fi
+          done
+          en=$(wc -l < README.md); es=$(wc -l < README.es.md)
+          echo "README.md: $en lines · README.es.md: $es lines"
+          # A large divergence usually means one was updated and the other was not.
+          diff=$(( en > es ? en - es : es - en ))
+          if [ "$diff" -gt 80 ]; then
+            echo "::warning::README.md and README.es.md differ by $diff lines — has one fallen behind?"
+          fi

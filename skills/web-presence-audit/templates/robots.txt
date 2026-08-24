@@ -1,0 +1,89 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  robots.txt  —  https://example.com/robots.txt
+#
+#  Replace example.com throughout. Serve from the site root with
+#  Content-Type: text/plain.
+#
+#  IMPORTANT: robots.txt controls CRAWLING, not INDEXING. A blocked page can
+#  still be indexed from external links — the crawler simply cannot see its
+#  content or its noindex tag. To keep a page OUT of the index, allow crawling
+#  and use <meta name="robots" content="noindex">.
+#
+#  This file is public. Never use it to hide anything sensitive — it is a
+#  published list of what you consider worth hiding.
+# ─────────────────────────────────────────────────────────────────────────────
+
+User-agent: *
+Allow: /
+
+# Authenticated and administrative areas
+Disallow: /admin/
+Disallow: /account/
+Disallow: /dashboard/
+Disallow: /settings/
+
+# API surfaces — no crawl value, and they consume crawl budget
+Disallow: /api/
+
+# Internal search results — infinite space, thin pages, duplicate content
+Disallow: /search
+Disallow: /*?q=
+
+# Faceted navigation — combinatorial explosion of near-duplicate URLs
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?page=
+Disallow: /*?utm_
+
+# Transient and personal pages
+Disallow: /cart
+Disallow: /checkout
+Disallow: /thank-you        # keep out of the index; keep it a real, linkable URL
+
+# Allow the assets needed to render pages correctly.
+# Blocking CSS or JS makes the crawler see a broken page and judge it accordingly.
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.avif$
+
+Sitemap: https://example.com/sitemap.xml
+
+
+# ─── Optional: AI crawlers ───────────────────────────────────────────────────
+#
+# A deliberate decision, not a default. Blocking these removes your content from
+# training corpora AND, for some crawlers, from the assistant's ability to cite
+# you as a source — which is increasingly a traffic channel. Decide which of
+# those two you care about more, and document the decision.
+#
+# Crawler names change; verify current user-agent strings against each
+# operator's published documentation before relying on this list.
+#
+# User-agent: GPTBot
+# Disallow: /
+#
+# User-agent: CCBot
+# Disallow: /
+#
+# User-agent: Google-Extended
+# Disallow: /
+#
+# User-agent: anthropic-ai
+# Disallow: /
+
+
+# ─── Staging and preview environments ────────────────────────────────────────
+#
+# For any non-production host, serve THIS file instead — and protect it with
+# HTTP authentication as well. robots.txt alone will not keep a staging site out
+# of the index if anything links to it.
+#
+#   User-agent: *
+#   Disallow: /
+#
+# Add a deploy-time assertion that production's robots.txt does NOT contain
+# "Disallow: /". Shipping the staging file to production is one of the
+# highest-impact, lowest-visibility incidents a site can have: traffic decays
+# over weeks and recovery takes weeks more.

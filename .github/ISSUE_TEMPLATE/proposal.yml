@@ -1,0 +1,76 @@
+name: Propose a skill, check or improvement
+description: Something is missing that would make the suite meaningfully better.
+title: "[proposal] "
+labels: ["proposal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The bar for a **new skill** is high — it costs context for every user, in
+        every session. The bar for a **new check inside an existing skill** is
+        much lower. Please consider whether an existing skill should be extended
+        first.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of change
+      options:
+        - "A new check or section inside an existing skill"
+        - "A new template"
+        - "A new script"
+        - "A new slash command"
+        - "A whole new skill"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What goes wrong today
+      description: |
+        Describe a real situation where the current suite gives an inadequate
+        answer. Concrete beats general.
+      placeholder: |
+        "When I ask it to review a Flutter app, it applies web-oriented checks
+        and misses that a hardcoded API key in the bundle is readable by anyone."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What it should do instead
+      description: Ideally as the actual checklist items or guidance you would add.
+    validations:
+      required: true
+
+  - type: textarea
+    id: existing
+    attributes:
+      label: Which existing skill could hold this?
+      description: |
+        If the answer is "none", say why — that is the argument for a new skill,
+        and it is the part reviewers will focus on.
+    validations:
+      required: true
+
+  - type: textarea
+    id: verification
+    attributes:
+      label: How would someone verify it?
+      description: |
+        Every finding in this suite carries a verification step. What is the
+        command, test or check that proves the fix works?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: standard
+    attributes:
+      label: Editorial standard
+      description: See CONTRIBUTING.md.
+      options:
+        - label: Every claim in my proposal is checkable, not a preference
+        - label: No invented version numbers, CVE ids, benchmarks or statistics
+        - label: If it is security guidance, it is defensive only

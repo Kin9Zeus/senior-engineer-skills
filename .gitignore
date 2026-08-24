@@ -1,0 +1,53 @@
+# Environment and secrets — never commit these
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+id_rsa
+id_ed25519
+*credentials*.json
+!**/references/**
+!**/templates/**
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+venv/
+__pycache__/
+
+# Build output
+dist/
+build/
+out/
+.next/
+target/
+*.tsbuildinfo
+
+# Test and coverage
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+
+# Editor and OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and local state
+*.log
+npm-debug.log*
+.cache/
+tmp/
+
+# The source logo lives in assets/devleck-logo.png; this root copy is not shipped.
+/no_bg_logo_devleck.png

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "senior-engineer-skills",
+  "description": "Devleck Senior Engineer Skills — a 15-skill senior engineering org for Claude Code: full-spectrum project audits, greenfield architecture, security hardening, database engineering, API contracts, DevOps, observability, testing, performance, accessibility, SEO/trust surface, privacy compliance and release gates.",
+  "owner": {
+    "name": "Devleck",
+    "url": "https://github.com/Kin9Zeus/senior-engineer-skills"
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "homepage": "https://github.com/Kin9Zeus/senior-engineer-skills"
+  },
+  "plugins": [
+    {
+      "name": "senior-engineer-skills",
+      "description": "Acts as a senior engineering organization — principal engineer, senior fullstack, senior DBA, senior DevOps/SRE, security engineer, QA lead, accessibility and privacy specialists. Audits existing codebases against a 15-domain rubric and architects/builds new projects to senior professional standards.",
+      "author": {
+        "name": "Aleck Martinez",
+        "url": "https://github.com/Kin9Zeus"
+      },
+      "homepage": "https://github.com/Kin9Zeus/senior-engineer-skills",
+      "license": "MIT",
+      "version": "1.0.0",
+      "source": "./",
+      "category": "development",
+      "keywords": [
+        "code-review", "audit", "security", "owasp", "architecture", "devops",
+        "sre", "database", "api-design", "testing", "performance", "accessibility",
+        "wcag", "seo", "gdpr", "privacy", "compliance", "release", "fullstack"
+      ]
+    }
+  ]
+}

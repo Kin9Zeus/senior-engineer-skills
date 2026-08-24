@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-labelledby="t d">
+  <title id="t">Devleck Senior Engineer Skills</title>
+  <desc id="d">Devleck brand banner: a glitch-style lime upward arrow beside the wordmark "SENIOR ENGINEER SKILLS".</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#0A0B0D"/>
+      <stop offset="55%"  stop-color="#101318"/>
+      <stop offset="100%" stop-color="#0A0B0D"/>
+    </linearGradient>
+    <linearGradient id="lime" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#F4FF4A"/>
+      <stop offset="100%" stop-color="#D8EC00"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="14" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ECFF0C" stroke-width="1" stroke-opacity=".045"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="400" fill="url(#bg)"/>
+  <rect width="1280" height="400" fill="url(#grid)"/>
+  <rect x="0" y="0" width="1280" height="3" fill="#ECFF0C"/>
+
+  <!-- ── Glitch arrow mark ───────────────────────────────────────────────── -->
+  <g transform="translate(120 70)" filter="url(#glow)">
+    <!-- outer chevron -->
+    <path d="M130 8 L248 126 L248 196 L130 78 L12 196 L12 126 Z" fill="url(#lime)"/>
+    <!-- inner chevron with the split shaft -->
+    <path d="M130 106 L192 168 L192 262 L152 262 L152 168 L130 146 L108 168 L108 262 L68 262 L68 168 Z" fill="url(#lime)"/>
+    <!-- glitch fragments, left -->
+    <g fill="#ECFF0C">
+      <rect x="-28" y="118" width="34" height="7"/>
+      <rect x="-14" y="140" width="20" height="6"/>
+      <rect x="-40" y="160" width="26" height="6"/>
+      <rect x="18"  y="96"  width="46" height="6" opacity=".85"/>
+      <rect x="2"   y="182" width="30" height="6" opacity=".7"/>
+      <rect x="40"  y="240" width="22" height="6" opacity=".6"/>
+    </g>
+    <!-- glitch fragments, right -->
+    <g fill="#ECFF0C">
+      <rect x="254" y="112" width="38" height="7"/>
+      <rect x="268" y="134" width="22" height="6" opacity=".85"/>
+      <rect x="254" y="156" width="30" height="6" opacity=".7"/>
+      <rect x="204" y="90"  width="40" height="6" opacity=".8"/>
+      <rect x="200" y="212" width="26" height="6" opacity=".6"/>
+    </g>
+  </g>
+
+  <!-- ── Wordmark ────────────────────────────────────────────────────────── -->
+  <g font-family="'Segoe UI', Inter, 'Helvetica Neue', Arial, sans-serif">
+    <text x="470" y="150" fill="#ECFF0C" font-size="30" font-weight="700" letter-spacing="10">DEVLECK</text>
+    <text x="470" y="228" fill="#FFFFFF" font-size="64" font-weight="800" letter-spacing="-1.5">Senior Engineer</text>
+    <text x="470" y="292" fill="#FFFFFF" font-size="64" font-weight="800" letter-spacing="-1.5">Skills</text>
+    <text x="470" y="345" fill="#8A8F98" font-size="21" font-weight="400">
+      15 skills · audit any codebase · build to senior standards
+    </text>
+  </g>
+
+  <rect x="470" y="168" width="86" height="4" fill="#ECFF0C"/>
+</svg>

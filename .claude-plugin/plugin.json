@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "senior-engineer-skills",
+  "description": "Devleck Senior Engineer Skills — turns Claude Code into a senior engineering organization: full-spectrum audits of existing projects and standards-grade construction of new ones across security, data, API, DevOps, observability, testing, performance, accessibility, web presence, privacy and release readiness.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Aleck Martinez",
+    "url": "https://github.com/Kin9Zeus"
+  },
+  "homepage": "https://github.com/Kin9Zeus/senior-engineer-skills",
+  "repository": "https://github.com/Kin9Zeus/senior-engineer-skills",
+  "license": "MIT",
+  "keywords": ["engineering", "audit", "security", "architecture", "devops", "seo", "privacy", "accessibility"],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
+}

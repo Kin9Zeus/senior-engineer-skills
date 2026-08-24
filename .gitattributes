@@ -1,0 +1,34 @@
+# Normalise line endings so this repository behaves identically on every OS.
+* text=auto eol=lf
+
+# Shell scripts MUST be LF. A CRLF shebang fails on Linux and macOS with
+#   bad interpreter: /usr/bin/env bash^M
+# This repository is authored on Windows, so this rule is load-bearing.
+*.sh   text eol=lf
+*.bash text eol=lf
+
+# PowerShell is happiest with CRLF on Windows and tolerates LF elsewhere.
+*.ps1  text eol=crlf
+*.psm1 text eol=crlf
+
+# Windows-only files
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+
+# Binary — never touch these
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.avif binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.pdf  binary
+
+# SVG is text
+*.svg  text eol=lf
+
+# Keep GitHub's language stats meaningful
+*.md linguist-detectable=true
