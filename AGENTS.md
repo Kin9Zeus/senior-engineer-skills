@@ -108,6 +108,31 @@ Then **test the skill in a real session**: `./install.sh --project`, give the
 assistant a task that should trigger it, and confirm both that it activates and
 that the output is better than without it.
 
+## Every change updates the public face
+
+Whenever a skill, command, agent or script is added, renamed or materially
+changed, finish the same change by updating **all** of these — a release is not
+done until they agree with each other:
+
+1. `README.md` **and** `README.es.md` — badges (skills / commands / agents), the
+   intro count, the skills table, commands table, subagents list, scripts table,
+   the relevant "What it actually checks" block, and an example if the capability
+   is new. Keep the existing structure, tone and table formats; do not invent a new
+   layout.
+2. `CHANGELOG.md` — a new version entry (minor for new skills/commands/agents).
+3. `.claude-plugin/plugin.json` and `marketplace.json` — version, description,
+   keywords.
+4. `install.sh` / `install.ps1` — skill list and the "N skills · N commands · N
+   agents" line.
+5. `assets/banner.svg` — the skill count in the tagline.
+6. `docs/en/cookbook.md` and `docs/es/recetario.md` — a recipe for any new
+   workflow.
+7. The GitHub repository description and topics (`gh repo edit`), so the About box
+   matches the README.
+
+`grep -rn "15 skills\|fifteen\|quince"` (with the old numbers) is a cheap way to
+find stragglers. Then run the validation commands above.
+
 ## Do not
 
 - Add a skill without checking whether an existing one should be extended instead
