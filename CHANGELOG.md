@@ -65,7 +65,9 @@ dated 2026-10-23 and link their primary sources.
 - `secret-scan`: PHP include/`phpinfo` sinks, remote-script-to-shell, unpinned CI
   actions
 - `/snr-harden` and `snr-security-auditor`: look beneath the code and hand off
-- README (English and Spanish), installers, manifests and `AGENTS.md` updated
+- README (English and Spanish), installers, manifests and `AGENTS.md` updated;
+  the install section now covers Windows, macOS and Linux side by side
+- CI: GitHub Actions pinned to commit SHAs, with Dependabot keeping them current
 
 ---
 
