@@ -100,6 +100,7 @@ the most valuable paragraph in a skill.
 bash -n skills/*/scripts/*.sh install.sh
 python -c "import json;[json.load(open(p)) for p in ['.claude-plugin/marketplace.json','.claude-plugin/plugin.json']]"
 python -c "import xml.dom.minidom as m; m.parse('assets/banner.svg'); m.parse('assets/mark.svg')"
+claude plugin validate .      # Claude Code's own manifest check — CI does not run it
 ```
 
 PowerShell files:

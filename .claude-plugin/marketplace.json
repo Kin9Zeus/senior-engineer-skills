@@ -7,8 +7,7 @@
     "url": "https://github.com/Kin9Zeus/senior-engineer-skills"
   },
   "metadata": {
-    "version": "1.1.0",
-    "homepage": "https://github.com/Kin9Zeus/senior-engineer-skills"
+    "version": "1.1.1"
   },
   "plugins": [
     {
@@ -20,7 +19,7 @@
       },
       "homepage": "https://github.com/Kin9Zeus/senior-engineer-skills",
       "license": "MIT",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "source": "./",
       "category": "development",
       "keywords": [

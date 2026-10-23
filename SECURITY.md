@@ -87,10 +87,14 @@ Este repositorio contiene **definiciones de skills en Markdown y scripts de solo
 lectura**. No tiene runtime, servidor, dependencias ni datos. La superficie real
 es:
 
-1. **Los scripts.** `recon.sh`, `secret-scan.sh` y `web-check.sh` (y sus
+1. **Los scripts.** `recon.sh`, `secret-scan.sh`, `web-check.sh`,
+   `rotation-inventory.sh`, `php-check.sh` y `scope-guard.sh` (y sus
    equivalentes en PowerShell) se ejecutan en la máquina de quien los usa y leen
    sus archivos. Una inyección de comandos o un *path traversal* en ellos sería
-   una vulnerabilidad real.
+   una vulnerabilidad real. `rotation-inventory` nunca debe imprimir el valor de
+   un secreto, y `scope-guard` nunca debe aprobar un objetivo fuera de su archivo
+   de alcance ni después de su fecha de caducidad: un fallo en cualquiera de los
+   dos es una vulnerabilidad genuina.
 2. **La guía.** Una skill que indique al asistente hacer algo inseguro
    —desactivar la verificación TLS, registrar un secreto, debilitar un control o
    escanear infraestructura sin autorización— es un defecto de seguridad de este

@@ -15,6 +15,26 @@ For a skill suite, versioning means:
 
 ---
 
+## [1.1.1] — 2026-10-23
+
+Plugin manifest fix. Found by running `claude plugin validate .`, which CI does not.
+
+### Fixed
+
+- `plugin.json`: removed `"agents": "./agents/"`. Claude Code requires `agents` to be
+  `.md` file paths; the directory form failed validation. The `agents/` directory is
+  discovered automatically when the key is omitted.
+- `marketplace.json`: removed the unsupported `metadata.homepage` field.
+
+### Added
+
+- `plugin.json`: `icon` (the 1024×1024 Devleck logo)
+- `validate.mjs` now rejects a directory-form `agents` value and a missing `icon`
+  file, so this cannot regress
+- `SECURITY.md`: Spanish section brought to parity with the English one
+
+---
+
 ## [1.1.0] — 2026-10-23
 
 Security response and authorised testing. Prompted by two incidents disclosed on

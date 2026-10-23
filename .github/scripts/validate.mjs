@@ -154,6 +154,12 @@ for (const p of [".claude-plugin/marketplace.json", ".claude-plugin/plugin.json"
       for (const [key, dir] of [["skills", "skills"], ["commands", "commands"], ["agents", "agents"]]) {
         if (json[key] && !existsSync(join(ROOT, dir))) err(`${p}: declares '${key}' but ${dir}/ does not exist`);
       }
+      // Claude Code's plugin validator requires 'agents' to be .md paths, not a directory.
+      // Omit the key and the agents/ directory is discovered automatically.
+      const ag = json.agents;
+      if (typeof ag === "string" && !ag.endsWith(".md"))
+        err(`${p}: 'agents' must be .md file path(s), not '${ag}' — omit the key to auto-discover agents/`);
+      if (json.icon && !existsSync(join(ROOT, json.icon))) err(`${p}: icon '${json.icon}' does not exist`);
     }
   } catch (e) {
     err(`${p}: invalid JSON — ${e.message}`);
