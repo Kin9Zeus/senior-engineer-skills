@@ -132,6 +132,8 @@ done until they agree with each other:
    workflow.
 7. The GitHub repository description and topics (`gh repo edit`), so the About box
    matches the README.
+8. After CI is green on `main`: an annotated tag `vX.Y.Z` and a GitHub release
+   whose notes are the CHANGELOG entry (`gh release create`).
 
 `grep -rn "15 skills\|fifteen\|quince"` (with the old numbers) is a cheap way to
 find stragglers. Then run the validation commands above.
