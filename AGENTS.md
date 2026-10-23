@@ -88,6 +88,9 @@ the most valuable paragraph in a skill.
 - Both `.sh` (POSIX, clean under `bash -n`) and `.ps1` (PowerShell 5.1+, clean
   under the language parser).
 - No dependencies beyond `curl`, `grep`, `git` and the shell.
+- **Mark every new `.sh` executable in git** — Git on Windows does not do it, and
+  CI fails the build: `git update-index --add --chmod=+x <path>.sh` before
+  committing, then check with `git ls-files -s '*.sh'` (all must be `100755`).
 - **Everything they report is a lead, not a finding**, and the output says so.
 - Exit `0` clean, `1` findings, `2` usage error.
 
