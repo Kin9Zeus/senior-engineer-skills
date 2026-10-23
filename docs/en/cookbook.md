@@ -240,3 +240,74 @@ tell you which findings it is down-weighting.
 **Four things are never down-weighted**, and it will say so: secrets in git,
 cross-user data access, absent backups, and privacy claims that are not true.
 Those cause the same harm regardless of how small the project is.
+
+---
+
+## 11 · A provider says your secrets may be exposed
+
+A host, CI or registry announces unauthorised access to the systems that store
+your environment variables (the October 2026 Railway disclosure is the worked
+example in the suite).
+
+```
+/snr-incident Railway says our environment variables may be exposed
+```
+
+It classifies this as a provider breach, reads the provider's own disclosure,
+and runs the response in order: a names-only inventory of every secret the repo
+reads, a rotation plan by blast radius (cloud, database, signing keys, payments,
+AI keys, registries), **upstream first** — create the new credential at the issuer,
+deploy, revoke the old one, then prove it dead with a `401`. It then points you at
+the issuers' audit logs, because the attacker did not control those.
+
+```
+/snr-rotate all
+```
+
+produces the tracker row by row. A row is done only when the old value is proven
+dead. Afterwards, `/snr-cloud` shows how to make the *next* stolen variable worth
+little: narrow scope, network allowlists, spend caps, no long-lived CI keys.
+
+## 12 · A critical PHP vulnerability is announced
+
+```
+/snr-php
+```
+
+It finds every PHP you run — repo declarations, base images, hosting config,
+bundled copies — resolves the build that actually **serves** traffic (the CLI on
+your shell is often a different install), compares it with the fixed releases for
+CVE-2026-109618 and CVE-2026-109619, and checks that workers were restarted. If you
+cannot patch today it lists the interim mitigations with an owner and a removal
+date, and then runs the compromise assessment: assume exposure since the earliest
+reported attempt, rotate what the PHP process could read, hunt for shells spawned by
+web workers. Verify the advisory facts against php.net and your distribution
+yourself — the skill dates them and links the sources.
+
+## 13 · Testing your own system like an attacker would
+
+```
+/snr-pentest https://staging.example.com
+```
+
+Before any traffic it asks for written confirmation that you own or are authorised
+to test the target, writes a `scope.txt` with an expiry date, and runs
+`scope-guard` for every host. Then: access control with two accounts per role, the
+OWASP API Top 10 as a test plan, injection with inert markers, business-logic and
+race conditions on staging. Each finding comes with a fix, a regression test and a
+detection signal; `--retest` proves the fixes. It will not run denial-of-service,
+malware, persistence or post-exploitation, and without a scope it will only review
+your code or work in a local lab.
+
+## 14 · Securing an AI feature or agent
+
+```
+/snr-ai-security the support chatbot
+```
+
+It inventories model calls, tools, data sources and MCP servers, then looks for the
+dangerous combination: **private data + untrusted content + a way to send things
+out** in one session. Prompts cannot fix that; the design must break one leg. It also
+checks tool permissions and approval gates, output handling, tenant isolation in the
+vector store, provider-key scope and spend caps, and builds an attack-suite eval you
+run in CI.

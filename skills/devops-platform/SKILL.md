@@ -162,6 +162,18 @@ CMD ["node", "dist/server.js"]
 - Prefer short-lived federated credentials (OIDC from CI to cloud) over
   long-lived static keys.
 - Secret scanning in CI and as a pre-commit hook.
+- **Assume the platform can be breached.** Hosting and CI providers have had
+  incidents that exposed stored environment variables. Keep each credential
+  narrow, network-restricted and spend-capped, and keep a rehearsed rotation
+  runbook — a stolen variable should buy an attacker little. See `cloud-security`
+  (secrets ladder, blast radius) and `security-incident-response` (the rotation
+  playbook and the dated Railway case file).
+- **Have a second route to ship a patch.** If the provider freezes deploys during
+  an incident, a security fix must still be deployable (or the exposed service
+  restrictable at the edge). Know the answer before you need it.
+- **Rebuild on advisories, not on features.** A pinned base image that is never
+  rebuilt keeps its old runtime. Runtime CVEs (language, web server, OS packages)
+  trigger a rebuild with `--pull --no-cache` and a check of the *running* build.
 
 ---
 

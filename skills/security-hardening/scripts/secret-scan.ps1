@@ -135,6 +135,8 @@ $sinks = [ordered]@{
     'Raw HTML sinks'                      = 'dangerouslySetInnerHTML|v-html|\.innerHTML\s*=|document\.write|html_safe|\|\s*safe'
     'Deserialization'                     = 'pickle\.load|yaml\.unsafe_load|ObjectInputStream|unserialize\(|Marshal\.load'
     'Server-side fetch of input URL (SSRF)' = '(fetch|axios|requests\.(get|post)|http\.(get|request)|urlopen|curl_exec)\([^)]*(req\.|request\.|params|query|body)'
+    'PHP include/require of a variable path' = '(include|require)(_once)?\s*\(?\s*\$[A-Za-z_]'
+    'PHP phpinfo() / diagnostic output'   = '\bphpinfo\s*\('
 }
 foreach ($name in $sinks.Keys) {
     $hits = $targets | Select-String -Pattern $sinks[$name] | Select-Object -First 5
@@ -149,6 +151,8 @@ $cfg = [ordered]@{
     'Permissive CORS'                   = 'Access-Control-Allow-Origin[^,)]*\*|origin\s*:\s*(true|"\*")'
     'Weak hashing on secrets'           = '(md5|sha1)\(.*(pass|pwd|secret|token)'
     'Non-crypto randomness for tokens'  = '(Math\.random|random\.random)\(\)[^;]*(token|secret|key|otp|nonce|password)'
+    'Remote script piped to a shell'    = 'curl[^|]*\|\s*(sudo\s+)?(ba|z)?sh\b|wget[^|]*\|\s*(sudo\s+)?(ba|z)?sh\b'
+    'CI action not pinned to a SHA'     = 'uses:\s*[\w./-]+@(main|master|v?\d+(\.\d+)*)\s*$'
 }
 foreach ($name in $cfg.Keys) {
     $hits = $targets | Select-String -Pattern $cfg[$name] | Select-Object -First 5

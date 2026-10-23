@@ -5,7 +5,7 @@ assistant, read this before changing anything here.
 
 ## What this is
 
-A skill suite for AI coding agents. Fifteen skills, seven slash commands, four
+A skill suite for AI coding agents. Twenty skills, fourteen slash commands, eight
 subagents, and read-only helper scripts. **There is no application here** — no
 build, no runtime, no dependencies. The deliverable is prose that changes how an
 assistant behaves.
@@ -49,7 +49,16 @@ problem each solves. Do not add premature complexity back in because it sounds
 senior.
 
 **5 · Defensive security only.** No weaponised exploits. No instructions to scan
-or send traffic to infrastructure without confirmed authorisation.
+or send traffic to infrastructure without confirmed authorisation. "Ethical
+hacking" content (`pentest-methodology`) stays inside this rule: it is gated on
+written authorisation and a scope file, proves findings with the least harmful
+evidence, and contains no malware, denial-of-service, persistence or
+post-exploitation guidance.
+
+**Dated incident facts.** Case files (the Railway disclosure, the PHP
+"php2shell" CVEs) carry a "last verified" date and link primary sources. When you
+update one, re-read the source, change the date, and never add a fact you could
+not find there.
 
 **6 · Privacy content is not legal advice**, and says so where it appears.
 
@@ -65,7 +74,7 @@ data"), not only the formal domain terms.
 
 **Keep `SKILL.md` to roughly 150–300 lines.** It loads in full when triggered.
 Depth belongs in `references/`, which loads only when that skill decides it needs
-it. This is why fifteen skills cost almost no context.
+it. This is why twenty skills cost almost no context.
 
 **Lead with the order of work**, not a taxonomy. What first, and why that first?
 

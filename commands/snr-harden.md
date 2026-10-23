@@ -26,6 +26,22 @@ are authorised to test.
 10 Logging           — auth events logged; no secrets or PII in logs
 ```
 
+## Beyond the application layer
+
+Code review alone misses the layers beneath it. Alongside the ten steps above,
+also run, as the recon shows they apply:
+
+```
+Platform & secrets   /snr-cloud    — a stolen env var must buy an attacker little
+PHP runtime          /snr-php      — running build vs fixed release; config; code
+AI features          /snr-ai-security
+Active attack test   /snr-pentest  — only with written authorisation + scope file
+Already compromised? /snr-incident — stop hardening; rotate and preserve evidence
+```
+
+If a provider has announced a breach or a runtime flaw is being exploited, **do not
+start with hardening** — start with `/snr-incident`.
+
 ## Run the scan first
 
 `skills/security-hardening/scripts/secret-scan.sh` (or `.ps1`). It is read-only.

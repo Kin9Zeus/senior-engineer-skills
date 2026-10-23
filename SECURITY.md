@@ -10,8 +10,12 @@ This repository contains **Markdown skill definitions and read-only shell
 scripts**. It has no runtime, no server, no dependencies and no data. The
 realistic security surface is:
 
-1. **The scripts.** `recon.sh`, `secret-scan.sh` and `web-check.sh` (and their
+1. **The scripts.** `recon.sh`, `secret-scan.sh`, `web-check.sh`,
+   `rotation-inventory.sh`, `php-check.sh` and `scope-guard.sh` (and their
    PowerShell equivalents) run on a contributor's machine and read their files.
+   `rotation-inventory` must never print a secret value, and `scope-guard` must
+   never approve a target outside its scope file or after its expiry date — a flaw
+   in either is a genuine vulnerability.
    A command-injection or path-traversal flaw in one of them would be a genuine
    vulnerability.
 2. **The guidance.** A skill that instructs an assistant to do something unsafe —

@@ -250,3 +250,76 @@ dirá qué hallazgos está bajando de prioridad.
 otros usuarios, ausencia de copias de seguridad, y afirmaciones de privacidad que
 no son ciertas. Esas causan el mismo daño sin importar lo pequeño que sea el
 proyecto.
+
+---
+
+## 11 · Un proveedor dice que tus secretos pudieron quedar expuestos
+
+Un host, un CI o un registro anuncia acceso no autorizado a los sistemas que guardan
+tus variables de entorno (el comunicado de Railway de octubre de 2026 es el ejemplo
+resuelto de la suite).
+
+```
+/snr-incident Railway dice que nuestras variables de entorno pudieron quedar expuestas
+```
+
+Lo clasifica como brecha de proveedor, lee el comunicado original del proveedor y
+ejecuta la respuesta en orden: inventario solo de nombres de cada secreto que el repo
+lee, plan de rotación por radio de impacto (nube, base de datos, claves de firma,
+pagos, claves de IA, registros), **primero en el emisor** — crear la credencial nueva
+en el emisor, desplegar, revocar la vieja y luego demostrar que está muerta con un
+`401`. Después te lleva a los logs de auditoría de los emisores, porque el atacante no
+los controlaba.
+
+```
+/snr-rotate all
+```
+
+genera el seguimiento fila a fila. Una fila está terminada solo cuando el valor viejo
+está probado muerto. Después, `/snr-cloud` muestra cómo hacer que la *próxima* variable
+robada valga poco: alcance estrecho, listas de red permitida, topes de gasto, sin
+claves largas en CI.
+
+## 12 · Se anuncia una vulnerabilidad crítica de PHP
+
+```
+/snr-php
+```
+
+Encuentra cada PHP que ejecutas — declaraciones del repo, imágenes base, configuración
+de hosting, copias incluidas en otro software — resuelve el build que realmente
+**sirve** el tráfico (el CLI de tu shell suele ser otra instalación), lo compara con
+las versiones corregidas de CVE-2026-109618 y CVE-2026-109619 y comprueba que los
+workers se reiniciaron. Si hoy no puedes parchear, lista las mitigaciones temporales
+con responsable y fecha de retirada, y luego hace la evaluación de compromiso: asume
+exposición desde el primer intento reportado, rota lo que el proceso PHP podía leer y
+caza shells lanzados por workers web. Verifica tú mismo los hechos del aviso en php.net
+y en tu distribución — la skill los fecha y enlaza las fuentes.
+
+## 13 · Probar tu propio sistema como lo haría un atacante
+
+```
+/snr-pentest https://staging.example.com
+```
+
+Antes de enviar tráfico pide confirmación escrita de que eres dueño o estás autorizado
+a probar el objetivo, escribe un `scope.txt` con fecha de caducidad y ejecuta
+`scope-guard` para cada host. Después: control de acceso con dos cuentas por rol, el
+OWASP API Top 10 como plan de prueba, inyección con marcadores inertes, lógica de
+negocio y condiciones de carrera en staging. Cada hallazgo trae corrección, test de
+regresión y señal de detección; `--retest` demuestra las correcciones. No ejecutará
+denegación de servicio, malware, persistencia ni post-explotación, y sin alcance solo
+revisará tu código o trabajará en un laboratorio local.
+
+## 14 · Asegurar una función de IA o un agente
+
+```
+/snr-ai-security el chatbot de soporte
+```
+
+Inventaría llamadas a modelos, herramientas, fuentes de datos y servidores MCP, y busca
+la combinación peligrosa: **datos privados + contenido no confiable + una vía para
+enviar cosas fuera** en una misma sesión. Los prompts no lo arreglan; el diseño debe
+romper una pata. También revisa permisos de herramientas y aprobaciones, manejo de
+salidas, aislamiento de inquilinos en el almacén vectorial, alcance y topes de gasto de
+las claves del proveedor, y arma una batería de ataques que ejecutas en CI.

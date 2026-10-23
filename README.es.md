@@ -6,14 +6,15 @@
 
 **Convierte Claude Code en un equipo de ingeniería senior.**
 
-Quince skills que auditan un proyecto existente en quince dominios, o construyen uno
-nuevo con el estándar que superaría una *due diligence*, un test de penetración y la
-revisión de una autoridad de protección de datos.
+Veinte skills que auditan un proyecto existente en quince dominios, responden a
+incidentes de seguridad, prueban sistemas con autorización, o construyen uno nuevo con
+el estándar que superaría una *due diligence*, un test de penetración y la revisión de
+una autoridad de protección de datos.
 
 [![Claude Skill](https://img.shields.io/badge/Claude-Skill-8B5CF6?style=flat-square)](https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills/overview)
-[![Skills](https://img.shields.io/badge/skills-15-ECFF0C?style=flat-square&labelColor=0A0B0D)](#las-skills)
-[![Comandos](https://img.shields.io/badge/comandos-7-ECFF0C?style=flat-square&labelColor=0A0B0D)](#comandos)
-[![Agentes](https://img.shields.io/badge/agentes-4-ECFF0C?style=flat-square&labelColor=0A0B0D)](#subagentes)
+[![Skills](https://img.shields.io/badge/skills-20-ECFF0C?style=flat-square&labelColor=0A0B0D)](#las-skills)
+[![Comandos](https://img.shields.io/badge/comandos-14-ECFF0C?style=flat-square&labelColor=0A0B0D)](#comandos)
+[![Agentes](https://img.shields.io/badge/agentes-8-ECFF0C?style=flat-square&labelColor=0A0B0D)](#subagentes)
 [![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-blue?style=flat-square)](LICENSE)
 
 **[English](README.md)** · **[Español](README.es.md)**
@@ -31,7 +32,7 @@ código que **sobrevive**: a una revisión de seguridad, a un incidente real, a 
 de escala, a la pregunta de un regulador y al ingeniero que lo herede dentro de dos
 años.
 
-Instala quince skills especializadas que Claude carga automáticamente cuando el
+Instala veinte skills especializadas que Claude carga automáticamente cuando el
 trabajo lo requiere, o que puedes invocar por nombre.
 
 ```
@@ -69,7 +70,7 @@ plugin globalmente:
 > Instala este plugin globalmente: https://github.com/Kin9Zeus/senior-engineer-skills
 
 Reinicia Claude Code y verifica con `/plugin`, o escribiendo `/snr-` — deberían
-aparecer los siete comandos.
+aparecer los catorce comandos.
 
 ### Cualquier agente — un solo comando
 
@@ -139,6 +140,41 @@ formulario empieza a recoger un correo electrónico — sin que se lo pidas.
 
 ---
 
+## Respuesta a incidentes y hacking ético
+
+Añadido en la 1.1.0, tras dos incidentes en la misma semana de octubre de 2026:
+
+- **Railway** comunicó (21 oct) que un tercero no autorizado pudo acceder a los
+  sistemas que almacenan las variables de entorno de los clientes — algunas
+  posiblemente descifradas — y pidió a todos rotar sus variables y credenciales de
+  registro. [Comunicado de Railway](https://blog.railway.com/p/security-disclosure-wednesday-october-21st).
+- **PHP** publicó correcciones de emergencia (21 oct) para dos fallos críticos de
+  ejecución remota de código sin autenticación en el propio intérprete,
+  CVE-2026-109618 y CVE-2026-109619 («php2shell»), corregidos en 8.5.12, 8.4.27,
+  8.3.36 y 8.2.35. [Alerta de CISA](https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching).
+
+> Los hechos de incidentes en las skills están **fechados a 2026-10-23** y enlazan
+> sus fuentes primarias. Relee las páginas actuales del proveedor y del proyecto PHP
+> antes de actuar.
+
+Qué hace ahora el conjunto al respecto:
+
+| Necesitas… | Usa | Idea central |
+|---|---|---|
+| Responder a una brecha, una clave filtrada, un CVE explotado, un servidor sospechoso | `/snr-incident` · `security-incident-response` | Revocar antes de investigar, investigar antes de limpiar; rotar **primero en el emisor** y demostrar que el valor viejo está muerto |
+| Rotar todos los secretos rápido | `/snr-rotate` | Inventario solo de nombres → orden por radio de impacto → verificar con un `401` |
+| Revisar y corregir PHP | `/snr-php` · `php-hardening` | Inventariar todo PHP, verificar el build **en ejecución**, mitigaciones temporales, evaluación de compromiso, base de FPM/ini |
+| Que una variable de entorno robada no valga nada | `/snr-cloud` · `cloud-security` | La escalera de secretos: acotado, restringido por red, con tope de gasto, de vida corta, detectado al primer uso |
+| Atacar tu propio sistema, con seguridad | `/snr-pentest` · `pentest-methodology` | **Autorización escrita + archivo de alcance + `scope-guard`** antes de enviar un solo paquete; prueba no destructiva; corrección, test de regresión y reprueba |
+| Asegurar funciones de IA y agentes | `/snr-ai-security` · `ai-security` | Romper la combinación datos privados / contenido no confiable / canal de salida; mínima agencia; claves de proveedor acotadas y con tope |
+| Modelar amenazas | `/snr-threatmodel` | STRIDE, un control y un test por amenaza |
+
+**Salvaguardas.** Solo defensivo y autorizado: sin exploits armados, sin malware, sin
+denegación de servicio, sin post-explotación, sin probar a terceros. Se rechaza el
+test activo sin un archivo de alcance cuya autorización no haya caducado.
+
+---
+
 ## Las skills
 
 <table>
@@ -203,10 +239,30 @@ formulario empieza a recoger un correo electrónico — sin que se lo pidas.
 <tr><td><b>engineering-standards</b></td>
 <td>Convenciones, flujo de git, práctica de PR y revisión, ADR, documentación, onboarding, DX, deuda técnica.</td>
 <td>Prácticas de equipo, onboarding</td></tr>
+
+<tr><td><b>security-incident-response</b></td>
+<td>Clasificar, contener, rotar secretos primero en el emisor, cazar en los logs del proveedor, erradicar, recuperar, notificar. Incluye el caso fechado de Railway y la hoja de rotación.</td>
+<td>"nos hackearon", "clave filtrada", "rota todos mis secretos"</td></tr>
+
+<tr><td><b>php-hardening</b></td>
+<td>Respuesta a php2shell (oct. 2026), inventario de PHP/SAPI, base de php.ini y FPM, mod_php → FPM, fallos de código PHP, Composer, WordPress, Laravel, Symfony.</td>
+<td>Cualquier proyecto PHP; "vulnerabilidad de PHP"</td></tr>
+
+<tr><td><b>pentest-methodology</b></td>
+<td>Pruebas de penetración autorizadas: puerta de autorización, guardián de alcance, planes de prueba web/API/nube, prueba no destructiva, informe y reprueba.</td>
+<td>"pentest", "hacking ético", "bug bounty"</td></tr>
+
+<tr><td><b>cloud-security</b></td>
+<td>Asumir que la plataforma será vulnerada: escalera de secretos, mínimo privilegio, OIDC, control de salida, contenedores, Kubernetes, escaneo de IaC, simulacros de rotación.</td>
+<td>"¿es seguro Railway?", "¿dónde guardo los secretos?"</td></tr>
+
+<tr><td><b>ai-security</b></td>
+<td>Inyección de prompts, agencia excesiva, manejo de salidas, aislamiento en RAG, cadena de suministro de MCP y skills, protección de claves y gasto de proveedores de IA.</td>
+<td>Funciones con LLM, agentes, servidores MCP</td></tr>
 </table>
 
 Cada skill es un `SKILL.md` conciso más archivos de referencia que se cargan bajo
-demanda — **más de cincuenta documentos** de checklists, rúbricas, patrones y
+demanda — **más de ochenta documentos** de checklists, rúbricas, patrones y
 plantillas, para que Claude trabaje desde un estándar y no desde la memoria.
 
 ---
@@ -222,13 +278,21 @@ plantillas, para que Claude trabaje desde un estándar y no desde la memoria.
 | `/snr-privacy [--policy\|--deletion\|--cookies]` | Inventario → política → consentimiento → pipeline de borrado |
 | `/snr-ship [versión]` | Puerta de go/no-go con veredicto explícito |
 | `/snr-scorecard [ruta]` | Puntuación rápida de 15 dominios en una pantalla |
+| `/snr-incident [qué pasó]` | Clasificar → contener → rotar en orden → cazar → recuperar (brecha, clave filtrada, CVE explotado) |
+| `/snr-rotate [alcance]` | Inventario de secretos (solo nombres) → orden por impacto → rotar primero en el emisor → probar que lo viejo está muerto |
+| `/snr-php [alcance]` | Inventario de PHP frente a versiones corregidas, mitigaciones temporales, endurecimiento de configuración y código |
+| `/snr-cloud [alcance]` | Revisión de nube / PaaS / contenedores partiendo de "la plataforma puede ser vulnerada" |
+| `/snr-pentest <objetivo> [--plan\|--retest]` | Prueba autorizada, acotada y no destructiva — condicionada a un archivo de alcance |
+| `/snr-ai-security [alcance]` | Revisión de funciones de IA y agentes, batería de ataques de inyección de prompts |
+| `/snr-threatmodel [sistema]` | Modelo STRIDE de treinta minutos con un control y un test por amenaza |
 
 ## Subagentes
 
-Cuatro especialistas para revisión enfocada y paralela. Son de solo lectura:
+Ocho especialistas para revisión enfocada y paralela. Son de solo lectura:
 informan y proponen, no aplican.
 
-`snr-security-auditor` · `snr-data-auditor` · `snr-web-auditor` · `snr-architect`
+`snr-security-auditor` · `snr-data-auditor` · `snr-web-auditor` · `snr-architect` ·
+`snr-incident-responder` · `snr-pentester` · `snr-cloud-auditor` · `snr-php-auditor`
 
 ```
 "usa los agentes snr-security-auditor y snr-data-auditor en paralelo sobre este repo"
@@ -245,6 +309,9 @@ a Claude para confirmar cada una leyendo el código.
 | `project-audit/scripts/recon.{sh,ps1}` | Stack, capa de estado, tests, CI, señales de riesgo, terceros |
 | `security-hardening/scripts/secret-scan.{sh,ps1}` | Patrones de credenciales en el árbol **y en el historial de git**, sumideros de inyección, configuración débil |
 | `web-presence-audit/scripts/web-check.{sh,ps1}` | URL en vivo: cabeceras, robots, soft-404, metadatos, OG, schema, textos ALT, páginas de confianza |
+| `security-incident-response/scripts/rotation-inventory.{sh,ps1}` | **Nombres** de secretos que el repo lee o define (nunca valores), por sensibilidad — la hoja de rotación |
+| `php-hardening/scripts/php-check.{sh,ps1}` | Cada versión de PHP declarada, el build del CLI frente a versiones corregidas, valores de ini, código PHP de riesgo |
+| `pentest-methodology/scripts/scope-guard.{sh,ps1}` | Rechaza cualquier host o IP fuera de un archivo de alcance firmado, o con la autorización caducada |
 
 ---
 
@@ -263,6 +330,35 @@ datos · índices en cada clave foránea · planes de consulta y N+1 · migracio
 reversibles probadas a escala de producción · límites de transacción · multi-tenancy
 aplicada en la base de datos · **copias de seguridad realmente restauradas** ·
 retención y borrado por tabla
+</details>
+
+<details>
+<summary><b>Respuesta a incidentes, runtime y plataforma</b></summary>
+
+**Rotar primero en el emisor, luego en la plataforma, luego revocar lo viejo — y
+demostrarlo con un `401`** · inventario de secretos solo de nombres · logs de auditoría
+del proveedor antes que los del host · checklist de persistencia · reconstruir desde una
+imagen limpia cuando no se puede probar que lo está · el build de PHP **en ejecución**,
+no el Dockerfile · cada SAPI y cada copia incluida en otro software · mitigaciones
+temporales con responsable y fecha de retirada · procesos web que lanzan shells ·
+`mod_php` → PHP-FPM · pools por aplicación con `clear_env` · la escalera de secretos
+(en código → variable de plataforma → gestor de secretos → ningún secreto estático) ·
+OIDC en lugar de claves largas en CI · listas de red permitida y topes de gasto en cada
+clave · credenciales señuelo · un **simulacro de rotación cronometrado y ensayado**
+</details>
+
+<details>
+<summary><b>Pruebas autorizadas y seguridad de IA</b></summary>
+
+**Un alcance y reglas de compromiso por escrito antes del primer paquete**, aplicados
+por `scope-guard` · la matriz de autorización entre cuentas · OWASP WSTG y API Top 10
+como planes de prueba · marcadores inertes, nunca extracción de datos · cada hallazgo
+reproducido dos veces, con corrección, test de regresión y señal de detección, y luego
+reprobado · inyección de prompts directa e indirecta · la combinación datos privados /
+contenido no confiable / canal de salida · mínima agencia y aprobación humana para lo
+irreversible · salida del modelo tratada como entrada no confiable · almacenes
+vectoriales por inquilino · servidores MCP, skills y `AGENTS.md` revisados como código
+· claves de proveedores de IA acotadas y con tope
 </details>
 
 <details>
@@ -325,6 +421,10 @@ excusa para uno inseguro; es una razón para que la versión segura sea barata.
 > muta: autenticado, autorizado *para ese objeto concreto*, validado por esquema y con
 > límite de tasa. Solo consultas parametrizadas. Una CSP que no sea `unsafe-inline`.
 >
+> **Resiliencia** — Asume que el host o el CI pueden filtrar lo que guardan: cada
+> credencial acotada, restringida por red, con tope de gasto y por entorno, con un
+> **runbook de rotación ensayado**. El runtime está parcheado — en el build *en ejecución*.
+>
 > **Datos** — Migraciones versionadas y reversibles. Copias de seguridad **restauradas
 > al menos una vez en una prueba** — una copia sin probar no es una copia. Datos
 > personales inventariados, minimizados, con retención acotada y borrables.
@@ -350,7 +450,7 @@ API ni un benchmark · confirmar antes de cualquier acción destructiva.
 
 ## Ejemplos
 
-> **[→ El recetario](docs/es/recetario.md)** — diez flujos completos, en el orden
+> **[→ El recetario](docs/es/recetario.md)** — catorce flujos completos, en el orden
 > en que los ejecutarías de verdad: heredar un código, empezar uno bien,
 > diagnosticar lentitud, construir el pipeline de borrado, arreglar la visibilidad
 > en buscadores, cerrar la puerta de un lanzamiento, y el uso diario sin comandos.
@@ -378,6 +478,23 @@ API ni un benchmark · confirmar antes de cualquier acción destructiva.
     de verificación, la traza de auditoría y el test que falla cuando se añade una
     tabla nueva sin regla.
 
+"Railway dice que nuestras variables de entorno pudieron quedar expuestas"
+  → /snr-incident. Clase A. Inventario solo de nombres, rotación por orden de impacto
+    (nube → base de datos → claves de firma → pagos → claves de IA → registros), primero
+    en el emisor, cada valor viejo probado muerto con un 401, y luego caza en los logs
+    del proveedor.
+
+"¿mi sitio PHP está afectado por la nueva vulnerabilidad de PHP?"
+  → /snr-php. Encuentra cada PHP, resuelve el build que realmente sirve tráfico, lo
+    compara con las versiones corregidas, lista mitigaciones temporales si hoy no
+    puedes parchear y ejecuta la evaluación de compromiso para la ventana de exposición.
+
+"haz un pentest de mi sitio de staging"
+  → /snr-pentest. Pide autorización escrita y alcance, escribe scope.txt, ejecuta
+    scope-guard antes de cada host, prueba el control de acceso con dos cuentas,
+    demuestra hallazgos con marcadores inertes, informa corrección + test de
+    regresión y luego reprueba.
+
 "¿estamos listos para lanzar el jueves?"
   → /snr-ship. "NO GO. Tres bloqueantes. El mayor es que cualquier usuario
     autenticado puede leer las facturas de otro, lo que sería una brecha notificable
@@ -397,12 +514,12 @@ los subagentes son funciones de Claude Code; las skills en sí son portables.
 </details>
 
 <details>
-<summary><b>Quince skills, ¿no llenan la ventana de contexto?</b></summary>
+<summary><b>Veinte skills, ¿no llenan la ventana de contexto?</b></summary>
 
 No. Solo se cargan de entrada las *descripciones* de las skills (unos pocos cientos de
 tokens en total). El cuerpo de una skill se carga cuando se activa, y sus archivos de
 referencia solo cuando esa skill decide que los necesita. Por eso el conjunto son
-quince skills enfocadas y no un único documento enorme.
+veinte skills enfocadas y no un único documento enorme.
 </details>
 
 <details>
@@ -412,6 +529,18 @@ Es defensivo de principio a fin: encontrar y corregir debilidades en código que
 o estás autorizado a evaluar. Las skills instruyen a Claude para no escanear ni enviar
 tráfico a infraestructura sin confirmación de propiedad, y para producir correcciones
 y detecciones en lugar de exploits armados.
+</details>
+
+<details>
+<summary><b>¿Puede «hackear» mi sistema?</b></summary>
+
+Puede ejecutar una **prueba de seguridad autorizada, acotada y no destructiva** — como
+lo hace un pentester profesional. Exige tu confirmación escrita de propiedad o
+autorización, un archivo de alcance con fecha de caducidad, y comprueba cada host contra
+ese archivo antes de tocarlo. Demuestra los hallazgos con marcadores inofensivos, nunca
+extrae datos reales y nunca ejecuta denegación de servicio, malware, persistencia ni
+post-explotación. Sin alcance, solo revisará código que poseas o trabajará en un
+laboratorio local. Ver `pentest-methodology`.
 </details>
 
 <details>

@@ -109,6 +109,8 @@ warn_scan "Dynamic code evaluation" '\beval\(|new Function\(|setTimeout\([^,]*["
 warn_scan "Raw HTML sinks"          'dangerouslySetInnerHTML|v-html|\.innerHTML[[:space:]]*=|document\.write|html_safe|\braw\(|\|[[:space:]]*safe'
 warn_scan "Deserialization"         'pickle\.load|yaml\.unsafe_load|ObjectInputStream|unserialize\(|Marshal\.load'
 warn_scan "Server-side fetch of input URL (SSRF)" '(fetch|axios|requests\.(get|post)|http\.(get|request)|urlopen|curl_exec)\([^)]*(req\.|request\.|params|query|body)'
+warn_scan "PHP include/require of a variable path" '(include|require)(_once)?[[:space:]]*\(?[[:space:]]*\$[A-Za-z_]'
+warn_scan "PHP phpinfo() / diagnostic output"      '\bphpinfo[[:space:]]*\('
 
 # ── 6. Configuration weaknesses ───────────────────────────────────────────────
 sec "6 · CONFIGURATION"
@@ -117,6 +119,8 @@ warn_scan "TLS verification disabled" 'rejectUnauthorized[[:space:]]*:[[:space:]
 warn_scan "Permissive CORS"         'Access-Control-Allow-Origin[^,)]*\*|origin[[:space:]]*:[[:space:]]*(true|"\*")'
 warn_scan "Weak hashing on secrets" '(md5|sha1)\((.*(pass|pwd|secret|token))'
 warn_scan "Non-crypto randomness for tokens" '(Math\.random|random\.random)\(\)[^;]*(token|secret|key|otp|nonce|password)'
+warn_scan "Remote script piped to a shell"   '(curl|wget)[^|]*\|[[:space:]]*(sudo[[:space:]]+)?(ba|z)?sh\b'
+warn_scan "CI action not pinned to a SHA"    'uses:[[:space:]]*[A-Za-z0-9_./-]+@(main|master|v?[0-9]+(\.[0-9]+)*)[[:space:]]*$'
 
 # ── 7. Ignore-file hygiene ────────────────────────────────────────────────────
 sec "7 · IGNORE FILES"

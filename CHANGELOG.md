@@ -15,6 +15,60 @@ For a skill suite, versioning means:
 
 ---
 
+## [1.1.0] — 2026-10-23
+
+Security response and authorised testing. Prompted by two incidents disclosed on
+21 October 2026: Railway's possible exposure of stored customer environment
+variables, and PHP's emergency fix for two critical unauthenticated
+remote-code-execution flaws (CVE-2026-109618, CVE-2026-109619). Incident facts are
+dated 2026-10-23 and link their primary sources.
+
+### Skills (+5 → 20)
+
+| Skill | Covers |
+|---|---|
+| `security-incident-response` | Triage into four classes, ordered upstream-first secret rotation with proof the old value is dead, provider-side log hunting, persistence checklist, recovery, notification flag; Railway case file; incident timeline and rotation tracker templates |
+| `php-hardening` | php2shell response (inventory, patch, restart, verify the running build, interim mitigations, compromise assessment), php.ini / FPM / nginx / Apache / container baseline, PHP-specific code flaws, Composer, WordPress, Laravel, Symfony |
+| `pentest-methodology` | Authorisation gate and rules of engagement, scope guard, white/grey/black-box method, web / API (OWASP API Top 10) / infrastructure test plans, tooling and a local practice lab, reporting and retest; RoE and report templates |
+| `cloud-security` | "Assume the platform is breached": the secrets ladder, blast-radius questions, OIDC federation, egress control, PaaS / AWS / GCP / Azure / container / Kubernetes / IaC checklists, rotation drills |
+| `ai-security` | Prompt injection, the private-data / untrusted-content / outbound-channel overlap, excessive agency, output handling, RAG and tenant isolation, MCP / skill / instruction-file supply chain, AI-provider key and spend protection, an attack-suite eval design |
+
+### Commands (+7 → 14)
+
+`/snr-incident` · `/snr-rotate` · `/snr-php` · `/snr-pentest` · `/snr-cloud` ·
+`/snr-ai-security` · `/snr-threatmodel`
+
+### Agents (+4 → 8)
+
+`snr-incident-responder` · `snr-pentester` · `snr-cloud-auditor` · `snr-php-auditor`
+
+### Scripts (+3, each in `.sh` and `.ps1`)
+
+- `security-incident-response/scripts/rotation-inventory` — secret **names** the
+  repository reads or defines, never values
+- `php-hardening/scripts/php-check` — declared PHP versions, CLI build against the
+  fixed releases, ini values, PHP risk patterns
+- `pentest-methodology/scripts/scope-guard` — refuses hosts and IPs outside a signed
+  scope file or after its expiry
+
+### Changed
+
+- `senior-engineer`: routes the new skills; non-negotiable bar now includes runtime
+  currency and blast-radius-limited credentials; description covers security events
+- `security-hardening`: new section on platform and runtime failure; routing to the
+  new skills; secret-value guidance
+- `project-audit`: security extensions table (PHP, platform, AI, compromise, testing)
+- `devops-platform`, `release-readiness`: platform-breach, rebuild-on-advisory and
+  rotation-readiness checks added; launch checklist gains runtime and rotation gates
+- `role-playbooks`: Penetration Tester and Incident Responder playbooks; platform
+  trust and runtime currency in the AppSec playbook
+- `secret-scan`: PHP include/`phpinfo` sinks, remote-script-to-shell, unpinned CI
+  actions
+- `/snr-harden` and `snr-security-auditor`: look beneath the code and hand off
+- README (English and Spanish), installers, manifests and `AGENTS.md` updated
+
+---
+
 ## [1.0.0] — 2026-08-24
 
 First public release.

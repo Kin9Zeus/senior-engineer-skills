@@ -73,6 +73,21 @@ depth:
 
 Say which depth you are running, and why.
 
+**Security extensions — load alongside `security-hardening` for domains 1 and 13
+whenever the evidence calls for them:**
+
+| If the recon shows… | Also load | Why |
+|---|---|---|
+| PHP (`composer.json`, `.php`, a `php` image, WordPress, Laravel, Symfony) | `php-hardening` | The runtime itself has had critical, actively targeted flaws; check the running build, SAPI and config before the code |
+| A hosting platform, CI, containers, Terraform, or any stored secrets | `cloud-security` | Score how much a stolen environment variable would buy an attacker (blast radius, rotation readiness) |
+| Model/LLM calls, agents, tools, MCP servers, third-party skills | `ai-security` | Prompt-injection paths, agent permissions, provider-key spend exposure |
+| Any sign the system may *already* be compromised (unknown processes or files, foreign admin users, a vendor breach notice, a key in public) | `security-incident-response` | **Stop the audit and switch.** Auditing a live compromise destroys evidence and delays rotation |
+| A request to *test* (not review) a running system | `pentest-methodology` | Active testing needs written authorisation and a scope file; this audit does not authorise it |
+
+A high-risk system (payments, health, regulated data, public API) should end with
+a recommendation for an authorised penetration test even when the code review is
+clean — reading code does not replace attacking the running thing.
+
 **Parallelising.** For a large codebase, running domain passes concurrently as
 subagents is the right call — dispatch security, data, testing and web-presence
 as independent reviewers, then merge. This skill authorises that; give each

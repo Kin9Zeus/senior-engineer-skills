@@ -33,7 +33,9 @@ AGENT=""; PROJECT=0; SKILLS_ONLY=0; UNINSTALL=0; DRY=0; ASSUME_YES=0
 SKILL_NAMES=(senior-engineer project-audit project-blueprint security-hardening
   database-engineering api-contracts devops-platform observability-slo
   testing-strategy performance-engineering accessibility-audit
-  web-presence-audit privacy-compliance release-readiness engineering-standards)
+  web-presence-audit privacy-compliance release-readiness engineering-standards
+  security-incident-response php-hardening pentest-methodology cloud-security
+  ai-security)
 
 usage() { sed -n '2,22p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0; }
 
@@ -51,7 +53,7 @@ while [ $# -gt 0 ]; do
 done
 
 printf "\n${LIME}${BLD}  Devleck · Senior Engineer Skills${OFF}\n"
-printf "${DIM}  15 skills · 7 commands · 4 agents${OFF}\n\n"
+printf "${DIM}  20 skills · 14 commands · 8 agents${OFF}\n\n"
 
 # ── Resolve the target directory ─────────────────────────────────────────────
 detect_agent() {
@@ -160,6 +162,8 @@ cat <<EOF
     ${LIME}/snr-scorecard${OFF}    fast 15-domain rating
     ${LIME}/snr-build${OFF}        architect and scaffold something new
     ${LIME}/snr-ship${OFF}         go/no-go release gate
+    ${LIME}/snr-incident${OFF}     breach / leaked key / exploited CVE response
+    ${LIME}/snr-pentest${OFF}      authorised, scoped security test
 
   Or just describe the work — the skills activate on their own.
 

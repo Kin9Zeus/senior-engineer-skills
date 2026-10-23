@@ -1,6 +1,6 @@
 ---
 name: senior-engineer
-description: Operate as a senior engineering organization (principal engineer, senior fullstack, senior DBA, senior DevOps/SRE, security, QA, accessibility and privacy leads) for any non-trivial software work. Use when the user asks to audit, review, assess, harden, refactor, architect, scaffold, plan, build or ship a project or feature; when they say "is this production ready", "review my project", "build me a", "start a new project", "make this professional", "senior level", "best practices", "what am I missing", "enterprise grade", "at scale", "code smells", "technical debt", "tech stack" or "architecture"; or whenever a change touches auth, payments, personal data, migrations, deploys or public-facing pages. Routes to the specialised skills in this suite and enforces the non-negotiable quality bar. By Devleck.
+description: Operate as a senior engineering organization (principal engineer, senior fullstack, senior DBA, senior DevOps/SRE, security, QA, accessibility and privacy leads) for any non-trivial software work. Use when the user asks to audit, review, assess, harden, refactor, architect, scaffold, plan, build or ship a project or feature; when they say "is this production ready", "review my project", "build me a", "start a new project", "make this professional", "senior level", "best practices", "what am I missing", "enterprise grade", "at scale", "code smells", "technical debt", "tech stack" or "architecture"; or whenever a change touches auth, payments, personal data, migrations, deploys or public-facing pages; and for security events — a breach, a leaked key, a critical CVE, a pentest request, an AI or PHP security question. Routes to the specialised skills in this suite and enforces the non-negotiable quality bar. By Devleck.
 license: MIT
 ---
 
@@ -71,6 +71,18 @@ checklists, rubrics and templates that beat recall.
 | Privacy policy, data map, DSAR and deletion, cookies | `privacy-compliance` | Any personal data at all |
 | Go/no-go gate, rollback, runbooks | `release-readiness` | Before any launch |
 | Conventions, git flow, ADRs, docs, tech debt | `engineering-standards` | Team practices, onboarding |
+| Breach, leaked key, critical CVE, "is my server hacked", rotate secrets | `security-incident-response` | **First, whenever something may already be compromised** |
+| PHP runtime, php.ini/FPM, WordPress, Laravel, Symfony | `php-hardening` | Any PHP project; urgently when a PHP advisory is live |
+| Cloud/PaaS, secrets architecture, IAM, containers, IaC, blast radius | `cloud-security` | Any hosting or pipeline decision; after any provider incident |
+| Pentest, ethical hacking, attack-surface testing, bug bounty | `pentest-methodology` | Only with written authorisation and a scope file |
+| LLM features, agents, tool calling, MCP, prompt injection, AI spend | `ai-security` | Any code that calls a model or loads third-party skills/servers |
+
+**Security tasks that are not "review the code".** Four situations change the
+order of work. A *provider or platform breach* or *leaked key* means rotate first,
+investigate second, clean third. A *live exploited runtime flaw* means inventory,
+patch, restart and verify the running build, then assume exposure. A request to
+*attack* a system is a gated, scoped engagement — never a quick scan. And anything
+that looks *already compromised* stops the audit and starts incident response.
 
 **Parallelise large audits.** For a full audit of a real codebase, dispatch
 independent domain reviews concurrently and merge the findings — but only when
@@ -89,6 +101,11 @@ an excuse for an unsafe one; it is a reason for the safe version to be cheap.
 - Parameterised queries only. Output encoding at render. A CSP that is not
   `unsafe-inline`.
 - Dependencies pinned with a lockfile; automated vulnerability alerts enabled.
+- The language runtime, web server and base image are on a supported, patched
+  release — verified on the **running** build, rebuilt when an advisory lands.
+- Every production credential is narrow, network-restricted, spend-capped and
+  separate per environment, and a rotation runbook exists that has been rehearsed.
+  Assume the host or CI can leak what it stores.
 
 **Data**
 - Migrations are versioned, reversible and reviewed. No manual production schema

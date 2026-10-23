@@ -60,6 +60,12 @@ look clean while the key stays live.
 **Also check for secrets in:** built client bundles, source maps, container image
 layers, CI logs, error messages, and `PUBLIC_`-prefixed environment variables.
 
+**Then ask what a stolen secret is worth.** A credential that is narrow,
+restricted to your network, capped in spend and distinct per environment turns a
+leak into an annoyance. A single all-powerful key turns it into a breach. If a
+hosting provider announces that stored variables may be exposed, the response is
+rotation, not reassurance — see `security-incident-response`.
+
 ---
 
 ## 2. Broken access control — the highest-yield review
@@ -209,7 +215,37 @@ See `references/supply-chain.md`.
 
 ---
 
-## 8. Threat modelling — for new systems and major features
+## 8. Assume the platform and the runtime can fail
+
+Application code is one layer. Two recent classes of event sit **below** it, and
+code review will not find them:
+
+- **A platform breach** — a host, CI or secrets store exposing the variables it
+  stores. Defence is not a code fix: it is making every credential narrow,
+  network-restricted, spend-capped and rotatable. Load `cloud-security`. If it has
+  already happened, load `security-incident-response` — rotate upstream first and
+  prove the old value dead.
+- **A flaw in the language runtime or web server** — for example the critical,
+  actively targeted PHP remote-code-execution pair disclosed in October 2026.
+  Defence is inventory, patch, restart and verify the *running* build. Load
+  `php-hardening` for PHP; the same discipline applies to any runtime.
+
+Check in every review: **which exact runtime build is serving traffic, is it
+supported and patched, and what could a code-execution flaw in it read?** (Everything
+in the process's environment and filesystem — which is why §1 and `cloud-security`
+matter.)
+
+Also route by situation:
+
+| Situation | Skill |
+|---|---|
+| The user wants the system *attacked* (tested), not reviewed | `pentest-methodology` — needs written authorisation and a scope file first |
+| An AI feature, agent, tool or MCP server | `ai-security` |
+| Something may already be compromised | `security-incident-response` |
+
+---
+
+## 9. Threat modelling — for new systems and major features
 
 Four questions, thirty minutes, in `references/threat-modelling.md`:
 
@@ -258,3 +294,5 @@ be reintroduced.
 - `references/supply-chain.md` — dependencies, CI, build integrity
 - `references/threat-modelling.md` — the 30-minute STRIDE pass
 - `scripts/secret-scan.sh` / `scripts/secret-scan.ps1` — read-only secret and pattern scan
+- Companion security skills: `php-hardening`, `cloud-security`, `ai-security`,
+  `pentest-methodology`, `security-incident-response`

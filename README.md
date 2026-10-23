@@ -6,14 +6,14 @@
 
 **Turn Claude Code into a senior engineering organization.**
 
-Fifteen skills that audit an existing codebase across fifteen domains, or build a new one
-to the standard a due-diligence review, a penetration test and a data-protection
-regulator would all pass.
+Twenty skills that audit an existing codebase across fifteen domains, respond to security
+incidents, test systems with authorisation, or build a new one to the standard a
+due-diligence review, a penetration test and a data-protection regulator would all pass.
 
 [![Claude Skill](https://img.shields.io/badge/Claude-Skill-8B5CF6?style=flat-square)](https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills/overview)
-[![Skills](https://img.shields.io/badge/skills-15-ECFF0C?style=flat-square&labelColor=0A0B0D)](#the-skills)
-[![Commands](https://img.shields.io/badge/commands-7-ECFF0C?style=flat-square&labelColor=0A0B0D)](#slash-commands)
-[![Agents](https://img.shields.io/badge/agents-4-ECFF0C?style=flat-square&labelColor=0A0B0D)](#subagents)
+[![Skills](https://img.shields.io/badge/skills-20-ECFF0C?style=flat-square&labelColor=0A0B0D)](#the-skills)
+[![Commands](https://img.shields.io/badge/commands-14-ECFF0C?style=flat-square&labelColor=0A0B0D)](#slash-commands)
+[![Agents](https://img.shields.io/badge/agents-8-ECFF0C?style=flat-square&labelColor=0A0B0D)](#subagents)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 
 **[English](README.md)** · **[Español](README.es.md)**
@@ -30,7 +30,7 @@ Most AI coding assistance produces code that works. This makes it produce code t
 **survives** — a security review, a real incident, a scaling event, a regulator's
 question, and the engineer who inherits it two years from now.
 
-It installs fifteen specialist skills that Claude loads automatically when the work
+It installs twenty specialist skills that Claude loads automatically when the work
 calls for them, or that you invoke by name.
 
 ```
@@ -66,7 +66,7 @@ globally:
 
 > Install this plugin globally: https://github.com/Kin9Zeus/senior-engineer-skills
 
-Restart Claude Code, then verify with `/plugin` or by typing `/snr-` — the seven
+Restart Claude Code, then verify with `/plugin` or by typing `/snr-` — the fourteen
 commands should appear.
 
 ### Any agent — one command
@@ -137,6 +137,40 @@ address — without being asked.
 
 ---
 
+## Security response & ethical hacking
+
+Added in 1.1.0, after two incidents in the same week of October 2026:
+
+- **Railway** disclosed (21 Oct) that an unauthorised party may have accessed the
+  systems storing customer environment variables — some possibly in decrypted form —
+  and asked every customer to roll all variables and registry credentials.
+  [Railway's disclosure](https://blog.railway.com/p/security-disclosure-wednesday-october-21st).
+- **PHP** shipped emergency fixes (21 Oct) for two critical, unauthenticated
+  remote-code-execution flaws in the interpreter itself, CVE-2026-109618 and
+  CVE-2026-109619 ("php2shell"), fixed in 8.5.12, 8.4.27, 8.3.36 and 8.2.35.
+  [CISA alert](https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching).
+
+> Incident facts in the skills are **dated 2026-10-23** and link their primary
+> sources. Re-read the provider's and the PHP project's current pages before acting.
+
+What the suite now does about it:
+
+| You need to… | Use | Core idea |
+|---|---|---|
+| Respond to a breach, a leaked key, an exploited CVE, a suspect server | `/snr-incident` · `security-incident-response` | Revoke before investigating, investigate before cleaning; rotate **upstream first** and prove the old value dead |
+| Rotate every secret fast | `/snr-rotate` | Names-only inventory → blast-radius order → verify with a `401` |
+| Check and fix PHP | `/snr-php` · `php-hardening` | Inventory every PHP, verify the **running** build, interim mitigations, compromise assessment, FPM/ini baseline |
+| Make a stolen env var worthless | `/snr-cloud` · `cloud-security` | The secrets ladder: narrow, network-restricted, spend-capped, short-lived, detected on first use |
+| Attack your own system, safely | `/snr-pentest` · `pentest-methodology` | **Written authorisation + a scope file + `scope-guard`** before any packet; non-destructive proof; fix, regression test, retest |
+| Secure AI features and agents | `/snr-ai-security` · `ai-security` | Break the private-data / untrusted-content / outbound-channel overlap; least agency; scoped, capped provider keys |
+| Model threats | `/snr-threatmodel` | STRIDE, a control and a test for each threat |
+
+**Guardrails.** Defensive and authorised only: no weaponised exploits, no malware,
+no denial of service, no post-exploitation, no testing of third parties. Active
+testing is refused without a scope file whose authorisation has not expired.
+
+---
+
 ## The skills
 
 <table>
@@ -201,9 +235,29 @@ address — without being asked.
 <tr><td><b>engineering-standards</b></td>
 <td>Conventions, git workflow, PR and review practice, ADRs, documentation, onboarding, DX, tech debt.</td>
 <td>Team practices, onboarding</td></tr>
+
+<tr><td><b>security-incident-response</b></td>
+<td>Classify, contain, rotate secrets upstream-first, hunt provider-side logs, eradicate, recover, notify. Includes the dated Railway case file and rotation tracker.</td>
+<td>"we got breached", "leaked key", "rotate all my secrets"</td></tr>
+
+<tr><td><b>php-hardening</b></td>
+<td>The October 2026 php2shell response, PHP/SAPI inventory, php.ini and FPM baseline, mod_php → FPM, PHP code flaws, Composer, WordPress, Laravel, Symfony.</td>
+<td>Any PHP project; "PHP vulnerability"</td></tr>
+
+<tr><td><b>pentest-methodology</b></td>
+<td>Authorised penetration testing: the authorisation gate, scope guard, web/API/cloud test plans, non-destructive proof, reporting and retest.</td>
+<td>"pentest", "ethical hacking", "bug bounty"</td></tr>
+
+<tr><td><b>cloud-security</b></td>
+<td>Assume the platform is breached: secrets ladder, least privilege, OIDC, egress control, containers, Kubernetes, IaC scanning, rotation drills.</td>
+<td>"is Railway safe?", "where do I keep secrets?"</td></tr>
+
+<tr><td><b>ai-security</b></td>
+<td>Prompt injection, excessive agency, output handling, RAG isolation, MCP and skill supply chain, AI-provider key and spend protection.</td>
+<td>LLM features, agents, MCP servers</td></tr>
 </table>
 
-Each skill is a focused `SKILL.md` plus reference files loaded on demand — **fifty-plus
+Each skill is a focused `SKILL.md` plus reference files loaded on demand — **eighty-plus
 documents** of checklists, rubrics, patterns and templates, so Claude works from a
 standard rather than from recall.
 
@@ -220,13 +274,21 @@ standard rather than from recall.
 | `/snr-privacy [--policy\|--deletion\|--cookies]` | Data inventory → policy → consent → deletion pipeline |
 | `/snr-ship [version]` | Go/no-go gate with an explicit verdict |
 | `/snr-scorecard [path]` | Fast 15-domain rating on one screen |
+| `/snr-incident [what happened]` | Classify → contain → rotate in order → hunt → recover (breach, leaked key, exploited CVE) |
+| `/snr-rotate [scope]` | Secret inventory (names only) → blast-radius order → rotate upstream-first → prove old values dead |
+| `/snr-php [scope]` | PHP runtime inventory vs fixed releases, interim mitigations, config and code hardening |
+| `/snr-cloud [scope]` | Cloud / PaaS / container review built on "the platform can be breached" |
+| `/snr-pentest <target> [--plan\|--retest]` | Authorised, scoped, non-destructive test — gated on a scope file |
+| `/snr-ai-security [scope]` | AI feature and agent review, prompt-injection attack suite |
+| `/snr-threatmodel [system]` | Thirty-minute STRIDE model with a control and a test per threat |
 
 ## Subagents
 
-Four specialists for focused, parallel review. Read-only; they report and propose
+Eight specialists for focused, parallel review. Read-only; they report and propose
 rather than apply.
 
-`snr-security-auditor` · `snr-data-auditor` · `snr-web-auditor` · `snr-architect`
+`snr-security-auditor` · `snr-data-auditor` · `snr-web-auditor` · `snr-architect` ·
+`snr-incident-responder` · `snr-pentester` · `snr-cloud-auditor` · `snr-php-auditor`
 
 ```
 "use the snr-security-auditor and snr-data-auditor agents on this repo in parallel"
@@ -243,6 +305,9 @@ Claude to confirm each one by reading the code.
 | `project-audit/scripts/recon.{sh,ps1}` | Stack, state layer, tests, CI, risk signals, third parties |
 | `security-hardening/scripts/secret-scan.{sh,ps1}` | Credential patterns in the tree **and git history**, injection sinks, config weaknesses |
 | `web-presence-audit/scripts/web-check.{sh,ps1}` | Live URL: headers, robots, soft-404, metadata, OG, schema, alt text, trust pages |
+| `security-incident-response/scripts/rotation-inventory.{sh,ps1}` | Secret **names** the repo reads or defines (never values), grouped by sensitivity — the rotation worksheet |
+| `php-hardening/scripts/php-check.{sh,ps1}` | Every declared PHP version, the CLI build vs fixed releases, ini values, PHP-specific risky code |
+| `pentest-methodology/scripts/scope-guard.{sh,ps1}` | Refuses any host or IP outside a signed scope file, or after authorisation expires |
 
 ---
 
@@ -260,6 +325,33 @@ constraints in the database · indexes on every foreign key · query plans and N
 reversible migrations tested at production scale · transaction boundaries · tenancy
 enforced in the database · **backups that have actually been restored** · retention
 and erasure per table
+</details>
+
+<details>
+<summary><b>Incident response, runtime &amp; platform security</b></summary>
+
+**Rotation upstream first, then the platform, then revoke the old one — and prove it
+with a `401`** · names-only secret inventory · provider-side audit logs hunted before
+host logs · persistence checklist · rebuild from a clean image when cleanliness cannot
+be proven · the **running** PHP build, not the Dockerfile · every SAPI and bundled
+copy · interim mitigations with an owner and a removal date · web workers that spawn
+shells · `mod_php` → PHP-FPM · per-app pools with `clear_env` · the secrets ladder
+(hard-coded → platform variable → secrets manager → no static secret) · OIDC instead
+of long-lived CI keys · network allowlists and spend caps on every key · canary
+credentials · a **timed, rehearsed rotation drill**
+</details>
+
+<details>
+<summary><b>Authorised testing &amp; AI security</b></summary>
+
+**A written scope and rules of engagement before the first packet**, enforced by
+`scope-guard` · the cross-account authorisation matrix · OWASP WSTG and API Top 10 as
+test plans · inert markers, never data harvesting · every finding reproduced twice,
+with a fix, a regression test and a detection signal, then retested · prompt injection
+direct and indirect · the private-data / untrusted-content / outbound-channel overlap ·
+least agency and human approval for the irreversible · model output treated as
+untrusted input · per-tenant vector stores · MCP servers, skills and `AGENTS.md`
+reviewed like code · scoped, capped AI-provider keys
 </details>
 
 <details>
@@ -319,6 +411,10 @@ excuse for an unsafe one; it is a reason for the safe version to be cheap.
 > authenticated, authorised *for that specific object*, schema-validated,
 > rate-limited. Parameterised queries only. A CSP that is not `unsafe-inline`.
 >
+> **Resilience** — Assume the host or CI can leak what it stores: every credential
+> narrow, network-restricted, spend-capped, per-environment, with a **rehearsed
+> rotation runbook**. The runtime is patched — on the *running* build.
+>
 > **Data** — Versioned reversible migrations. Backups **restored at least once in a
 > test** — an untested backup is not a backup. Personal data inventoried, minimised,
 > retention-bounded and deletable.
@@ -343,7 +439,7 @@ anything destructive.
 
 ## Examples
 
-> **[→ The cookbook](docs/en/cookbook.md)** — ten complete workflows, in the order
+> **[→ The cookbook](docs/en/cookbook.md)** — fourteen complete workflows, in the order
 > you would actually run them: inheriting a codebase, starting one properly,
 > diagnosing slowness, building the deletion pipeline, fixing search visibility,
 > gating a launch, and using it day to day without commands.
@@ -370,6 +466,21 @@ anything destructive.
     step, the audit trail, and the test that fails when a new table is added
     without a rule.
 
+"Railway says our environment variables may be exposed"
+  → /snr-incident. Class A. Names-only inventory, rotation in blast-radius order
+    (cloud → database → signing keys → payments → AI keys → registries), issuer
+    first, each old value proven dead with a 401, then provider-side log hunting.
+
+"is our PHP site affected by the new PHP vulnerability?"
+  → /snr-php. Finds every PHP, resolves the build that actually serves traffic,
+    compares with the fixed releases, lists interim mitigations if you cannot patch
+    today, and runs the compromise assessment for the exposure window.
+
+"pentest our staging site"
+  → /snr-pentest. Asks for written authorisation and scope, writes scope.txt, runs
+    scope-guard before every host, tests access control with two accounts, proves
+    findings with inert markers, reports fix + regression test, then retests.
+
 "are we ready to launch on Thursday?"
   → /snr-ship. "NO GO. Three blockers. The largest is that any authenticated user
     can read any other user's invoices, which would be a reportable data breach on
@@ -389,11 +500,11 @@ commands and subagents are Claude Code features; the skills themselves are porta
 </details>
 
 <details>
-<summary><b>Fifteen skills — does that fill up the context window?</b></summary>
+<summary><b>Twenty skills — does that fill up the context window?</b></summary>
 
 No. Only skill *descriptions* are loaded up front (a few hundred tokens total). A
 skill's body loads when it is triggered, and its reference files load only when that
-skill decides it needs them. This is why the suite is fifteen focused skills rather
+skill decides it needs them. This is why the suite is twenty focused skills rather
 than one enormous document.
 </details>
 
@@ -404,6 +515,18 @@ It is defensive throughout: finding and fixing weaknesses in code you own or are
 authorised to assess. The skills instruct Claude never to scan or send traffic to
 infrastructure without confirmation of ownership, and to produce fixes and detections
 rather than weaponised exploits.
+</details>
+
+<details>
+<summary><b>Can it "hack" my system?</b></summary>
+
+It can run an **authorised, scoped, non-destructive security test** — the way a
+professional penetration tester does. It requires your written confirmation of
+ownership or authorisation, a scope file with an expiry date, and it checks every
+host against that file before touching it. It proves findings with harmless markers,
+never harvests real data, and never runs denial-of-service, malware, persistence or
+post-exploitation. Without a scope it will only review code you own or work in a local
+lab. See `pentest-methodology`.
 </details>
 
 <details>

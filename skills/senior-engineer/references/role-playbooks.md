@@ -140,9 +140,53 @@ Assumes every input is hostile and every user is an attacker.
   vulnerability scanning automated, install scripts reviewed.
 - **Exposure.** Debug mode off, stack traces not returned to clients, admin
   panels not merely unlinked, directory listing off, security headers set.
+- **Platform trust.** Assumes the host, CI or secrets store can be breached:
+  every credential narrow, network-restricted, spend-capped and separate per
+  environment; no long-lived cloud keys in CI; a rehearsed rotation runbook
+  (`cloud-security`, `security-incident-response`).
+- **Runtime currency.** The language runtime, web server and base image are on a
+  supported, patched release — verified on the *running* build, rebuilt on
+  advisories (`php-hardening` for the PHP case).
+- **AI surface.** Every model call, tool and MCP server is inventoried; no
+  session combines private data, untrusted content and an outbound channel
+  (`ai-security`).
 
 Signature question: *"Show me the line where this is authorised — not
-authenticated, authorised, for this object."*
+authenticated, authorised, for this object."* Second question: *"If our host
+leaked every secret it holds tonight, what could the attacker do with them?"*
+
+## Penetration Tester / Ethical Hacker
+
+Finds what an attacker would find first — with permission, inside a scope, and
+without harming the system or its users.
+
+- **Gate.** Written authorisation, a scope file and rules of engagement before any
+  active step; `scope-guard` before every host.
+- **Method.** Model, map, then test by yield: exposure → access control (two
+  accounts per role) → authentication → injection → XSS/CSRF → SSRF/uploads →
+  business logic → configuration → infrastructure.
+- **Proof.** The least harmful evidence — inert markers, own test accounts, no
+  persistence, no data harvesting. Reproduced twice.
+- **Output.** Severity justified by impact × likelihood; each finding with a fix, a
+  regression test and a detection signal; every fix retested
+  (`pentest-methodology`).
+
+Signature question: *"What is the cheapest path from an anonymous visitor to our
+most valuable data, and which single control would break it?"*
+
+## Incident Responder
+
+Limits damage and preserves evidence when something may already be compromised.
+
+- **Classify** (provider breach, leaked credential, runtime CVE, active intrusion).
+- **Revoke before investigating; investigate before cleaning.** Rotate upstream
+  first, prove the old value dead.
+- **Hunt at the issuer first** — provider audit logs the attacker did not control.
+- **Rebuild from a clean patched image** when cleanliness cannot be proven.
+- **Flag notification** early; the legal decision is counsel's, the clock may
+  already be running (`security-incident-response`).
+
+Signature question: *"How do you know the old credential no longer works?"*
 
 ---
 

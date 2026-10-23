@@ -36,6 +36,19 @@ curl -s https://example.com/robots.txt | grep -E '^\s*Disallow:\s*/\s*$'
 # 7 · Dependency vulnerabilities — read the real output
 npm audit --production --audit-level=high
 # (or pip-audit / govulncheck / bundle audit / composer audit)
+
+# 8 · The runtime itself is patched (language, web server, base image)
+# No single command. Ask: "Which exact runtime build is SERVING traffic, and is it
+# at or above the vendor's latest security release?" Verify the RUNNING build
+# (a version route you control, the image digest, the deploy record) — not the
+# Dockerfile. An unpatched, actively exploited remote-code-execution flaw → NO GO.
+# PHP: bash skills/php-hardening/scripts/php-check.sh .
+
+# 9 · Rotation readiness
+# Ask: "If every environment variable on our host leaked tonight, how long to
+# rotate them all, and who does it?" No inventory, no runbook, or "days" → fix
+# before launch for any system holding customer data or spend-bearing keys.
+# bash skills/security-incident-response/scripts/rotation-inventory.sh .
 ```
 
 ---
@@ -55,6 +68,12 @@ npm audit --production --audit-level=high
 | Webhook signature verified | Post an unsigned event → `400`, no state change |
 | Upload restrictions | Post a 1GB file and a disguised executable → both rejected |
 | CORS is an allowlist | `curl -H 'Origin: https://evil.test' -I <api>` → not reflected |
+| Runtime on a patched, supported release | Resolve the running build; compare with the vendor's current security release; no end-of-life branches on the internet |
+| Secrets are narrow, restricted and capped | Each production credential: least privilege, network allowlist, spend cap, separate per environment (`cloud-security`) |
+| No static cloud keys in CI | Pipeline assumes a role via OIDC; assuming it from the wrong branch fails |
+| Rotation rehearsed | A timed drill in the last 6 months; old values proven dead (`security-incident-response`) |
+| AI features cannot exfiltrate | No session combines private data + untrusted content + an outbound channel without approval (`ai-security`) |
+| Authorised security test done (high-risk systems) | A scoped test or review with findings fixed and retested (`pentest-methodology`) |
 
 ## Data
 

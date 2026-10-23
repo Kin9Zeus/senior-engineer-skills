@@ -48,7 +48,9 @@ $SkillNames = @(
     'senior-engineer', 'project-audit', 'project-blueprint', 'security-hardening',
     'database-engineering', 'api-contracts', 'devops-platform', 'observability-slo',
     'testing-strategy', 'performance-engineering', 'accessibility-audit',
-    'web-presence-audit', 'privacy-compliance', 'release-readiness', 'engineering-standards'
+    'web-presence-audit', 'privacy-compliance', 'release-readiness', 'engineering-standards',
+    'security-incident-response', 'php-hardening', 'pentest-methodology', 'cloud-security',
+    'ai-security'
 )
 
 function Ok([string]$m)   { Write-Host "  [ok] $m" -ForegroundColor Green }
@@ -58,7 +60,7 @@ function Dim([string]$m)  { Write-Host $m -ForegroundColor DarkGray }
 
 Write-Host ""
 Write-Host "  Devleck . Senior Engineer Skills" -ForegroundColor Yellow
-Dim "  15 skills . 7 commands . 4 agents"
+Dim "  20 skills . 14 commands . 8 agents"
 Write-Host ""
 
 # --- Resolve the target ------------------------------------------------------
@@ -190,6 +192,8 @@ Write-Host "    /snr-audit      " -ForegroundColor Yellow -NoNewline; Write-Host
 Write-Host "    /snr-scorecard  " -ForegroundColor Yellow -NoNewline; Write-Host "fast 15-domain rating"
 Write-Host "    /snr-build      " -ForegroundColor Yellow -NoNewline; Write-Host "architect and scaffold something new"
 Write-Host "    /snr-ship       " -ForegroundColor Yellow -NoNewline; Write-Host "go/no-go release gate"
+Write-Host "    /snr-incident   " -ForegroundColor Yellow -NoNewline; Write-Host "breach / leaked key / exploited CVE response"
+Write-Host "    /snr-pentest    " -ForegroundColor Yellow -NoNewline; Write-Host "authorised, scoped security test"
 Write-Host ""
 Write-Host "  Or just describe the work - the skills activate on their own."
 Write-Host ""

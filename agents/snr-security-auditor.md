@@ -35,6 +35,20 @@ half-remembered detail is a false finding.
 Run `security-hardening/scripts/secret-scan.sh` if the environment allows. Every
 hit it reports is a **lead, not a finding**.
 
+**Also check the layers beneath the code** — they are where recent real-world
+incidents happened:
+
+- **Runtime:** which exact build serves traffic, is it supported and patched?
+  (PHP: `php-hardening`; or hand off to `snr-php-auditor`.)
+- **Blast radius of a stolen secret:** narrow? network-restricted? spend-capped?
+  per-environment? (`cloud-security`; or hand off to `snr-cloud-auditor`.)
+- **AI surface:** tools, agents, MCP servers, provider keys (`ai-security`).
+- **Signs of existing compromise** (unknown files or processes, foreign admin
+  users, a vendor breach notice, a key in public): **stop** and recommend
+  `snr-incident-responder` — do not keep auditing a live incident.
+- You never run active tests against a live system; recommend `snr-pentester`
+  (which requires written authorisation and a scope file) instead.
+
 ## The check that matters most
 
 Object-level authorization. For each route returning or mutating user-owned
