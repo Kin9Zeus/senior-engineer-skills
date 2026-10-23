@@ -54,22 +54,89 @@ Every finding carries a location, a concrete consequence, a fix, and a way to
 
 ## Install
 
-### Claude Code — plugin marketplace (recommended)
+> [!TIP]
+> **Fastest path — any OS, 30 seconds.** Inside Claude Code, run these two lines:
+>
+> ```
+> /plugin marketplace add Kin9Zeus/senior-engineer-skills
+> /plugin install senior-engineer-skills@senior-engineer-skills
+> ```
+>
+> Restart Claude Code, type `/snr-` — **fourteen commands appear**. Done.
 
+Not using Claude Code, want it in a single project, or want to read what gets copied
+first? Pick your system:
+
+<table>
+<tr>
+<th width="33%">🪟 Windows</th>
+<th width="33%">🍎 macOS</th>
+<th width="33%">🐧 Linux · WSL · Git Bash</th>
+</tr>
+<tr>
+<td>
+
+PowerShell 5.1+:
+
+```powershell
+git clone https://github.com/Kin9Zeus/senior-engineer-skills.git
+cd senior-engineer-skills
+./install.ps1
 ```
-/plugin marketplace add Kin9Zeus/senior-engineer-skills
-/plugin install senior-engineer-skills@senior-engineer-skills
+
+</td>
+<td>
+
+Terminal:
+
+```bash
+git clone https://github.com/Kin9Zeus/senior-engineer-skills.git
+cd senior-engineer-skills
+./install.sh
 ```
 
-Or just paste this repository's URL into Claude Code and ask it to install the plugin
-globally:
+</td>
+<td>
 
-> Install this plugin globally: https://github.com/Kin9Zeus/senior-engineer-skills
+Any shell with bash:
 
-Restart Claude Code, then verify with `/plugin` or by typing `/snr-` — the fourteen
-commands should appear.
+```bash
+git clone https://github.com/Kin9Zeus/senior-engineer-skills.git
+cd senior-engineer-skills
+./install.sh
+```
 
-### Any agent — one command
+</td>
+</tr>
+</table>
+
+The installer **shows exactly what it will do and asks before overwriting anything**.
+It auto-detects Claude Code, Cursor, Codex, OpenCode and Antigravity, and copies
+`skills/`, `commands/` and `agents/` into that agent's directory.
+
+> [!IMPORTANT]
+> We deliberately do **not** offer a `curl … | sh` one-liner. A security suite should
+> not ask you to execute a script you have not read. Clone, skim `install.sh` /
+> `install.ps1` (they are short), then run.
+
+### Installer options
+
+| You want to… | macOS · Linux · WSL | Windows (PowerShell) |
+|---|---|---|
+| **Preview** without changing anything | `./install.sh --dry-run` | `./install.ps1 -DryRun` |
+| Install for **one project only** (`./.claude/`) | `./install.sh --project` | `./install.ps1 -Project` |
+| Target a **specific agent** | `./install.sh --agent cursor` | `./install.ps1 -Agent cursor` |
+| Skills only — **no commands or agents** | `./install.sh --skills-only` | `./install.ps1 -SkillsOnly` |
+| **No prompts** (CI, scripts) | `./install.sh --yes` | `./install.ps1 -Yes` |
+| **Uninstall** | `./install.sh --uninstall` | `./install.ps1 -Uninstall` |
+
+Agents: `claude` · `cursor` · `codex` · `opencode` · `antigravity`. Options combine, e.g.
+`./install.sh --project --dry-run`.
+
+### Other ways in
+
+<details>
+<summary><b>Any agent — one command with Node (Windows, macOS, Linux)</b></summary>
 
 Works with Claude Code, Cursor, Codex, Windsurf, Copilot, Antigravity and
 [40+ other agents](https://github.com/vercel-labs/skills#supported-agents):
@@ -78,43 +145,76 @@ Works with Claude Code, Cursor, Codex, Windsurf, Copilot, Antigravity and
 npx skills add https://github.com/Kin9Zeus/senior-engineer-skills
 ```
 
-### Manual — clone and copy
-
-```bash
-git clone https://github.com/Kin9Zeus/senior-engineer-skills.git
-cd senior-engineer-skills
-
-# macOS / Linux
-./install.sh
-
-# Windows (PowerShell)
-./install.ps1
-```
-
-The installer copies `skills/`, `commands/` and `agents/` into your agent's
-directory. It prints exactly what it will do and asks before overwriting anything.
-
-<details>
-<summary><b>Skill directories by agent</b></summary>
-
-| Agent | Skills directory |
-|---|---|
-| Claude Code | `~/.claude/skills/` |
-| Cursor | `~/.cursor/skills/` |
-| OpenAI Codex | `~/.codex/skills/` |
-| OpenCode | `~/.config/opencode/skills/` |
-| Google Antigravity | `~/.gemini/antigravity/skills/` |
-
-For a single project instead of globally, copy into `.claude/skills/` in the
-project root.
+This installs the skills. Slash commands and subagents are Claude Code features; use
+the plugin or `install.sh` / `install.ps1` to get those too.
 </details>
 
-### Uninstall
+<details>
+<summary><b>Let Claude do it</b></summary>
 
+Paste the repository URL into Claude Code and ask:
+
+> Install this plugin globally: https://github.com/Kin9Zeus/senior-engineer-skills
+</details>
+
+<details>
+<summary><b>No Git installed (Windows)</b></summary>
+
+Download the ZIP from the repository's **Code → Download ZIP**, extract it, then in
+PowerShell from the extracted folder:
+
+```powershell
+Get-ChildItem -Recurse | Unblock-File     # clears the "downloaded from the internet" flag
+./install.ps1
 ```
-/plugin uninstall senior-engineer-skills
+</details>
+
+<details>
+<summary><b>Where the files go</b></summary>
+
+| Agent | Skills directory (macOS · Linux) | Windows |
+|---|---|---|
+| Claude Code | `~/.claude/skills/` | `%USERPROFILE%\.claude\skills\` |
+| Cursor | `~/.cursor/skills/` | `%USERPROFILE%\.cursor\skills\` |
+| OpenAI Codex | `~/.codex/skills/` | `%USERPROFILE%\.codex\skills\` |
+| OpenCode | `~/.config/opencode/skills/` | `%USERPROFILE%\.config\opencode\skills\` |
+| Google Antigravity | `~/.gemini/antigravity/skills/` | `%USERPROFILE%\.gemini\antigravity\skills\` |
+
+Commands and agents go to the sibling `commands/` and `agents/` directories. With
+`--project` / `-Project`, everything goes to `.claude/` in the current directory
+instead — commit it so your whole team gets the suite.
+</details>
+
+### Verify it worked
+
+1. **Restart** your agent.
+2. Type `/snr-` — you should see **14 commands** (`/snr-audit`, `/snr-incident`,
+   `/snr-pentest`, …).
+3. Ask for something that should trigger a skill: *"review my project before we
+   launch"* → `senior-engineer` and `project-audit` load.
+
+<details>
+<summary><b>Something is off?</b></summary>
+
+| Symptom | Fix |
+|---|---|
+| `/snr-` shows nothing | Restart the agent fully; for the plugin route confirm with `/plugin` |
+| `Permission denied` running `install.sh` | `chmod +x install.sh`, or run `bash install.sh` |
+| PowerShell: *"running scripts is disabled"* | For this window only: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`, then `./install.ps1` |
+| PowerShell: *"not digitally signed"* after a ZIP download | `Get-ChildItem -Recurse \| Unblock-File` |
+| Wrong agent detected | Pass it explicitly: `--agent cursor` / `-Agent cursor` |
+| Unsure what it will touch | `--dry-run` / `-DryRun` first — it changes nothing |
+</details>
+
+### Update and uninstall
+
+```bash
+git pull && ./install.sh          # Windows: git pull; ./install.ps1
 ```
-Or `./install.sh --uninstall` / `./install.ps1 -Uninstall`.
+
+Plugin route: refresh the marketplace from the `/plugin` menu and reinstall. Remove everything with
+`/plugin uninstall senior-engineer-skills`, or `./install.sh --uninstall` /
+`./install.ps1 -Uninstall`.
 
 ---
 
